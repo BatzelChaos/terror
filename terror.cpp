@@ -4,11 +4,14 @@
 #include <ncurses.h>
 #include <stdlib.h>
 #include <string.h>
+#include <vector>
+#include <cstdlib>
 #include "terror.h"
 
 #include "rapidxml.hpp"
 
 using namespace std;
+using std::vector;
 
 //class enemy:npc
 //{
@@ -22,11 +25,16 @@ class npc
 	int hp, atk, def, spd;
 	int npcID;
 	
-	npc(int npcID);
+	npc();
+	void npcInit(int npcID);
 	int hpGet();
 };
+npc::npc()
+{
+	
+}
 
-npc::npc(int npcID)
+void npc::npcInit(int npcID)
 {
 	switch(npcID)
 	{
@@ -34,7 +42,32 @@ npc::npc(int npcID)
 			npcname="wolf";
 			hp=3; atk=1; def=1; spd=1;
 			break;
+		
+		case 1:
+			npcname="wolf";
+			hp=3; atk=1; def=1; spd=1;
+			break;
+		case 2:
+			npcname="wolf";
+			hp=3; atk=1; def=1; spd=1;
+			break;
+		case 3:
+			npcname="wolf";
+			hp=3; atk=1; def=1; spd=1;
+			break;
+		case 4:
+			npcname="wolf";
+			hp=3; atk=1; def=1; spd=1;
+			break;
+		case 5:
+			npcname="wolf";
+			hp=3; atk=1; def=1; spd=1;
+			break;
+			
+		
 		default:
+			npcname="404 - NOT FOUND";
+			hp= 999; atk=999; def=999; spd=999;
 			break;
 	}
 }
@@ -42,59 +75,6 @@ npc::npc(int npcID)
 int npc::hpGet()
 {
 	return hp;
-}
-
-class BattleScene:public npc
-{
-	public:
-	
-	WINDOW *battleScreen;
-	int* enemy;
-	int enemyCount;
-	
-	BattleScene(int enemyC);
-	void hpbar();
-	
-	~BattleScene();
-};
-
-BattleScene::BattleScene(int enemyC):npc
-{
-	int screenHeight=30;
-	int screenWidth=100;
-	int starty=(LINES-screenHeight)/2;
-	int startx=(COLS-screenWidth)/2-20;
-	
-	battleScreen=create_newwin(screenHeight,screenWidth,starty,startx);
-	
-	enemyCount=enemyC;
-	enemy= new int[enemyCount];
-	for(int i;i<enemyCount;i++)
-	{
-		enemy[i]=random(1); //MAKE THIS A DYNAMIC OBJECT
-	}
-	for(int i;i<enemyCount;i++)
-	{
-		npc enemy[i](0); //temporary default option
-	}
-}
-
-void BattleScene::hpbar()
-{
-	int buffer1=5;
-	for(int i;i<enemyCount;i++)
-	{
-		int localhp=enemy[i].hpGet();
-		for(int j;j<localhp;j++)
-		{
-			wmvprintw(battleScreen, buffer1+i, j, "|");
-		}
-	}
-}
-
-BattleScene::~BattleScene()
-{
-	delete[] enemy;
 }
 
 class menumenu
@@ -106,7 +86,10 @@ class menumenu
 		//FLAGS
 		bool firstTimePlay;		
 		//FLAGS END
+		
+		//SETTINGS
 		int textSpeed=300;	//change this to be stored in a file and loaded in once the program starts
+		//SETTINGS END
 		
 		ifstream inData;
 		ofstream outData;
@@ -126,6 +109,7 @@ class menumenu
 		WINDOW *mainscreen;
 		
 		menumenu(int screenHeight, int screenWidth);
+		menumenu();
 		
 		
 		void borderControl(WINDOW *screen);
@@ -150,6 +134,97 @@ class menumenu
 		int newGameScreen();
 		
 };
+
+menumenu::menumenu()
+{
+	
+}
+
+class BattleScene:public npc, public menumenu
+{
+	public:
+	
+	WINDOW *battleScreen;
+	npc* enemy;
+	int enemyCount;
+	
+	BattleScene(int enemyC);
+	void hpbar();
+	void battle();
+	
+	int attack();
+	int items();
+	int status();
+	int run();
+	
+	~BattleScene();
+};
+
+BattleScene::BattleScene(int enemyC)
+{
+	int screenHeight=30;
+	int screenWidth=100;
+	int starty=(LINES-screenHeight)/2;
+	int startx=(COLS-screenWidth)/2-20;
+	
+	battleScreen=create_newwin(screenHeight,screenWidth,starty,startx);
+	
+	enemyCount=enemyC;
+	enemy= new npc[enemyCount];
+	for(int i = 0;i<enemyCount;i++)
+	{
+		int randomValue=random(5);
+		enemy[i].npcInit(randomValue);
+	}
+}
+
+int BattleScene::attack()
+{
+	//access skills to choose here
+
+	switch(enemyCount)
+	{
+		case 1:
+			break;
+		case 2:
+			break;
+	}
+}
+
+void BattleScene::hpbar()
+{
+	int buffer1 = 5;
+	
+	for(int i = 0;i<enemyCount;i++)
+	{
+		string a = to_string(enemy[i].hp);
+		
+		const char* hp = a.c_str();
+		wmvprintw(battleScreen, buffer1+i, 4, hp);
+
+		//ADD HP BARS I CAN'T THINK RN
+
+		//int localhp=enemy[i].hp;
+		//float mappedhp;
+		//if (localhp<20) 
+		//else 
+		//for(int j = 0;j<localhp&&20;j++)
+		//{
+		//	wmvprintw(battleScreen, buffer1+i, j+2, "|");
+		//}
+	}
+}
+
+void BattleScene::battle()
+{
+	
+}
+
+BattleScene::~BattleScene()
+{
+	delete[] enemy;
+}
+
 
 menumenu::menumenu(int height, int width)
 {
@@ -561,6 +636,7 @@ int menumenu::menuInitialise()
 	return gamestate;
 }
 
+
 int menumenu::play()
 {
 	int bufferX=bufferXmenu;
@@ -583,7 +659,13 @@ int menumenu::play()
 	wrefresh(mainscreen);
 	napms(textSpeed);
 	
-		
+	//TESTINGS
+	BattleScene battle(3);
+	mvwprintw(battle.battleScreen, 10, 20, "%d", battle.hp);
+
+	wgetch(battle.battleScreen);
+	//TESTINGS END
+	
 	WINDOW *tempScreen;
 	tempScreen=create_newwin(6, 50, bufferY, bufferX);
 	wmvprintw(tempScreen, 1, 1, "Enter your name:");
