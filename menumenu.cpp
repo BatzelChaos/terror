@@ -1,0 +1,617 @@
+#include "terror.h"
+
+using namespace std;
+
+bool gameBootedUpFirstTime=true;
+int location;
+int chatAdder;
+
+menumenu::menumenu(int height, int width)
+{
+	enterpressed=false;
+	menu=0;
+	menuType=0;
+	screenHeight=height;
+	screenWidth=width;
+	
+	int starty=(LINES-screenHeight)/2;
+	int startx=(COLS-screenWidth)/2;
+	
+	mainscreen=create_newwin(screenHeight,screenWidth,starty,startx);
+	wmove(mainscreen,1,1);
+	wtitle(mainscreen);
+	
+	/*inData.open("terror.settings");
+	string data;
+	
+	while (inData>>"">>firstTimePlay)
+	printw(firstTimePlay);*/
+	
+}
+	
+void menumenu::menuFunc_drawWindow(int windowType)
+{
+	int textBoxPosY, textBoxPosX, textBoxSizeY, textBoxSizeX;
+	
+	switch(windowType)
+	{
+		case 0: //MAIN MENU
+			textBoxPosY = 15; textBoxPosX = titlePlacement(bufferXmenu);
+			textBoxSizeY = 8; textBoxSizeX = 20;
+			
+			menuLimitY=3; menuLimitX=0;
+			break;
+		case 1: //BATTLE MENU
+			break;
+		case 2: //INVENTORY
+			break;    
+		case 3: //CREDITS
+			textBoxPosY = 15; textBoxPosX = titlePlacement(bufferXmenu)-10;
+			textBoxSizeY = 8; textBoxSizeX = 40;
+			
+			menuLimitY=0, menuLimitX=0;
+			break;
+		case 4: //CHARACTER SELECTION SCREEN
+			textBoxPosY = 1; textBoxPosX = 9;
+			textBoxSizeY = 42; textBoxSizeX = 140;
+			
+			menuLimitY=20; menuLimitX=105;
+			break;
+	}
+	menuScreen=create_newwin(textBoxSizeY, textBoxSizeX, textBoxPosY, textBoxPosX);
+}
+
+menumenu::menumenu()
+{
+	
+}
+
+void menumenu::menuFunc(int textPositionY, int textPositionX, WINDOW* tempScreen, int menuVar, int returnVar, const char* textVar)
+{
+	wmvprintw(tempScreen, textPositionY, textPositionX, textVar);
+	if(menu==(textPositionY-1)&&menuX==(textPositionX-1))
+	{
+		wmove(tempScreen, textPositionY, textPositionX);
+		wattron(tempScreen, A_STANDOUT);
+		wprintw(tempScreen, "%s", textVar);
+		wattroff(tempScreen, A_STANDOUT);
+		if (enterpressed==true) 
+		{
+
+			menuType=returnVar;
+			return;
+		}	
+	}
+	if (menuType==CHARACTER_SELECT)
+	{
+		if(menu==(textPositionY*20+1)&&menuX==(textPositionX*35+1))
+		{
+			wmove(tempScreen, textPositionY, textPositionX);
+			wattron(tempScreen, A_STANDOUT);
+			wprintw(tempScreen, "%s", textVar);
+			wattroff(tempScreen, A_STANDOUT);
+			if (enterpressed==true) 
+			{
+	
+				menuType=returnVar;
+				return;
+			}	
+		}
+	}
+	wrefresh(tempScreen);
+}
+
+void menumenu::debug()
+{
+	
+}
+
+int menumenu::titlePlacement(int widthTitle)
+{
+	int titleWidth=widthTitle; //manually checked
+	titleStartx=(screenWidth/2)-titleWidth/2;	
+
+	return titleStartx;
+}
+
+void menumenu::wtitle(WINDOW *screen) //title function
+{
+	int buffer1=4;
+	titlePlacement(58); //width, manually checked
+	wmove(screen, buffer1+1, titleStartx); wprintw(screen,"··························································");
+	wmove(screen, buffer1+2, titleStartx); wprintw(screen,": ____    ____      ___       ___       ____      ___    :");
+	wmove(screen, buffer1+3, titleStartx); wprintw(screen,":/_  _|  F ___J    F _ ',    F _ ',    F __ ]    F _ ',  :");
+	wmove(screen, buffer1+4, titleStartx); wprintw(screen,":[J  L] J |___:   J `-'(|   J `-'(|   J |--| L  J `-'(|  :");
+	wmove(screen, buffer1+5, titleStartx); wprintw(screen,": |  |  | _____|  |  _  L   |  _  L   | |  | |  |  _  L  :");
+	wmove(screen, buffer1+6, titleStartx); wprintw(screen,": F  J  F L____:  F |_|  L  F |_|  L  F L__J J  F |_|  L :");
+	wmove(screen, buffer1+7, titleStartx); wprintw(screen,":J____LJ________LJ__| ||__LJ__| ||__LJ|______/FJ__| ||__L:");
+	wmove(screen, buffer1+8, titleStartx); wprintw(screen,":|____||________||__|  J__||__|  J__| J______F |__|  J__|:");
+	wmove(screen, buffer1+9, titleStartx); wprintw(screen,"··························································");
+	
+	/*
+	empty space to paste-in a possible new title screen
+	*/
+}
+
+void menumenu::cleanUp(WINDOW *screen, int Y, int X)
+{
+	wmove(screen, Y, X); wprintw(screen, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"); //PLACEHOLDER THING
+	borderControl(screen); //BANDAID SOLUTION TO THE ABOVE PROBLEM
+	wrefresh(screen); //for now useless, but i'll remove borderControl from here
+}
+
+void menumenu::borderControl(WINDOW *screen)
+{
+	wborder(screen,'|','|','-','-','o','o','o','o');
+	wrefresh(screen);
+}
+
+void menumenu::skullart1()
+{
+	int buffer1=2;
+	titlePlacement(80);
+	 wmvprintw(mainscreen, buffer1+0, titleStartx, "                              █  ██████████████  █                              ");
+	 wmvprintw(mainscreen, buffer1+1, titleStartx, "                          █ ████████████████████████ █                          ");
+	 wmvprintw(mainscreen, buffer1+2, titleStartx, "                        ████████ ██          ██ ████████                        ");
+	 wmvprintw(mainscreen, buffer1+3, titleStartx, "                      ██████ ██    █        █    ██ ██████                      ");
+	 wmvprintw(mainscreen, buffer1+4, titleStartx, "	                 ███ ██ █      ██   ██   ██      █ ██ ███                    ");
+	 wmvprintw(mainscreen, buffer1+5, titleStartx, "                  ██████   ██ █       █▒▒█       █ ██   ██████                  ");
+	 wmvprintw(mainscreen, buffer1+6, titleStartx, "                 █ ██ █  █  █    █ ████  ████ █    █  █  █ ██ █                 ");
+	 wmvprintw(mainscreen, buffer1+7, titleStartx, "                █▒██ ██ █ █                          █ █ ██ ██▒█                ");
+	 wmvprintw(mainscreen, buffer1+8, titleStartx, "               █ ██ █ █▒█     █                  █     █▓█ █ ██ █               ");
+	 wmvprintw(mainscreen, buffer1+9, titleStartx, "              █ ██   █ █                                █ █   ██ █              ");
+	wmvprintw(mainscreen, buffer1+10, titleStartx, "             █ ██  ██               ███  ███               ██  ██ █             ");
+	wmvprintw(mainscreen, buffer1+11, titleStartx, "             █ ████     █ ██ ██       █  █       ██ ██ █     ████ █             ");
+	wmvprintw(mainscreen, buffer1+12, titleStartx, "              ██ ██   ███  █   ██              ██   █  ███   ██ ██              ");
+	wmvprintw(mainscreen, buffer1+13, titleStartx, "              ██ █   ██ ███ ███  █   ██  ██   █  ███ ███ ██   █ ██              ");
+	wmvprintw(mainscreen, buffer1+14, titleStartx, "             ██      █████      █ █          █ █      █████ ░    ██             ");
+	wmvprintw(mainscreen, buffer1+15, titleStartx, "             ██      ██ ███  ██ ▓█            █▓ ██  ███ ██      ██             ");
+	wmvprintw(mainscreen, buffer1+16, titleStartx, "             ██████   █  █   █ █ █            █ █ █   █  █   ██████             ");
+	wmvprintw(mainscreen, buffer1+17, titleStartx, "               █ █ ████  █  █████  ▓  █  █  ▓  █████  █  ████ █ █               ");
+	wmvprintw(mainscreen, buffer1+18, titleStartx, "               ██  █   ███████ ░     ██████     ░ ███████   █  ██               ");
+	wmvprintw(mainscreen, buffer1+19, titleStartx, "                 ██ █    █          ██▒██▒██          █    █ ██                 ");
+	wmvprintw(mainscreen, buffer1+20, titleStartx, "                 ███    █      ▒   ███ ██ ███   ▒      █    ███                 ");
+	wmvprintw(mainscreen, buffer1+21, titleStartx, "                  ███▓         █  ██ ██  ██ ██  █         ▓███                  ");
+	wmvprintw(mainscreen, buffer1+22, titleStartx, "                   █████ █  █      ▒█▓    ▓█▒      █  █ █████                   ");
+	wmvprintw(mainscreen, buffer1+23, titleStartx, "                    █ ██     █                    █     ██ █                    ");
+	wmvprintw(mainscreen, buffer1+24, titleStartx, "                      ████    █  ▓            █  █    ▓███                      ");
+	wmvprintw(mainscreen, buffer1+25, titleStartx, "                     █████    █                  █    █████                     ");
+	wmvprintw(mainscreen, buffer1+26, titleStartx, "                     █  ██ █                        █░██  █                     ");
+	wmvprintw(mainscreen, buffer1+27, titleStartx, "                      █ █████    █ ████  ████ █    █████ █                      ");
+	wmvprintw(mainscreen, buffer1+28, titleStartx, "                     ██ ███ ██████  ██ ██ ██  ██████ ███ ██                     ");
+	wmvprintw(mainscreen, buffer1+29, titleStartx, "                    █ █  ████████ ████████████ ████████  █ █                    ");
+	wmvprintw(mainscreen, buffer1+30, titleStartx, "                     ███ █ █  ██ ██ ████████ ██ ██  █ █ ███                     ");
+	wmvprintw(mainscreen, buffer1+31, titleStartx, "                     ██ ████████ ██████████████ ████████ ██                     ");
+	wmvprintw(mainscreen, buffer1+32, titleStartx, "                      █  ▒█████████████  █████████████▒  █                      ");
+	wmvprintw(mainscreen, buffer1+33, titleStartx, "                      ██  ███ ████████    ████████ ███  ██                      ");
+	wmvprintw(mainscreen, buffer1+34, titleStartx, "                      ██  ░   ███  █ ██████ █  ███   ░  ██                      ");
+	wmvprintw(mainscreen, buffer1+35, titleStartx, "                       █  █                          █  █                       ");
+	wmvprintw(mainscreen, buffer1+36, titleStartx, "                        ░█                            █▒                        ");
+	wmvprintw(mainscreen, buffer1+37, titleStartx, "                       ██ █   █  █            █  █   █ ██                       ");
+	wmvprintw(mainscreen, buffer1+38, titleStartx, "                         █ █ █        █  █        █ █ █                         ");
+	wmvprintw(mainscreen, buffer1+39, titleStartx, "                           ███  █████ ████ █████  ███                           ");
+	wmvprintw(mainscreen, buffer1+40, titleStartx, "                                   █ ██████ █                                   ");
+}
+
+void menumenu::refreshMainScreen()
+{
+	cleanUp(mainscreen,1,1);
+	skullart1();
+	wtitle(mainscreen);
+	wrefresh(mainscreen);
+}
+
+int menumenu::resetSettings()
+{
+	//reset the changes of the settings in the file to set values
+	return SETTINGS;
+}
+
+int menumenu::audio()
+{
+	return SETTINGS;
+}
+
+int menumenu::colorSelect()
+{
+	return GRAPHICS;
+}
+
+int menumenu::windowSize()
+{
+	return GRAPHICS;
+}
+
+int menumenu::settings()
+{
+	menuFunc_drawWindow(0);
+	menuFunc(1, 1, menuScreen, SETTINGS, RESET, "Reset");
+	menuFunc(2, 1, menuScreen, SETTINGS, AUDIO, "Audio");
+	menuFunc(3, 1, menuScreen, SETTINGS, GRAPHICS, "Graphics");
+	menuFunc(4, 1, menuScreen, SETTINGS, MAIN_MENU, "Back");
+
+	return menuType;
+}
+
+int menumenu::graphics()
+{
+	menuFunc_drawWindow(0);
+	menuFunc(1, 1, menuScreen, GRAPHICS, COLOR_SELECT, "Color Select");
+	menuFunc(2, 1, menuScreen, GRAPHICS, GRAPHICS, "placeholder");
+	menuFunc(3, 1, menuScreen, GRAPHICS, WINDOW_SIZE, "Graphics");
+	menuFunc(4, 1, menuScreen, GRAPHICS, SETTINGS, "Back");
+
+	return menuType;
+}
+
+int menumenu::credits()
+{
+	menuFunc_drawWindow(3);
+	menuFunc(1, 1, menuScreen, CREDITS, MAIN_MENU, "Everything: BatzelChaos (ME!)");
+	menuFunc(2, 1, menuScreen, CREDITS, MAIN_MENU, "Special thanks to the ncurses\n library and all the tutorials");
+	wgetch(menuScreen);
+	skullart1();
+	wtitle(mainscreen);
+	wrefresh(mainscreen);
+	return menuType;
+}
+
+int menumenu::mainMenu()
+{   //bool enterpressed,||int textPosition, WINDOW* tempScreen, int menuVar,|| int returnVar, const char* textVar
+
+	menuFunc_drawWindow(0);
+	menuFunc(1, 1, menuScreen, MAIN_MENU, NEW_GAME, "New Game");
+	menuFunc(2, 1, menuScreen, MAIN_MENU, SETTINGS, "Settings");
+	menuFunc(3, 1, menuScreen, MAIN_MENU, CREDITS, "Credits");
+	menuFunc(4, 1, menuScreen, MAIN_MENU, EXIT, "Exit");
+
+	return menuType;
+}
+
+int menumenu::characterSelect()
+{
+	menuFunc_drawWindow(4);
+	menuFunc(1, 1, menuScreen, CHARACTER_SELECT, BIENE, 
+	"Biene, the Exiled Princess"
+"\n ████████            ███████████  "
+"\n █████████▓     ▒   ████████████  "
+"\n ██████            ██████▒██████  "
+"\n ████              ████     █████ "
+"\n ███                         ████ "
+"\n ██                           ████"
+"\n █         ▓▒▓░               ████"
+"\n ▓     █░▓     █ █████▓        ███"
+"\n ▓  █ ███      █████▒█  █      ███"
+"\n █ ░ ██  █     ████  ████▒     ███"
+"\n █▒ ███  ▓    ▓████  ████▓     ███"
+"\n ██ ███  ████ █████  ███▓█    ████"
+"\n ███ █           ██     ▓▒   █▓███"
+"\n █  █▒              ██▒▓       ███"
+"\n █   ░█           █     █   ▓ ████"
+"\n █ █            ░█    ████   ░   ██"
+"\n  █     █▒█     ▓██▓ ▓██ ░  █ █  ██"
+"\n          ██ ▓ ██████    █  █    ██"
+"\n                            █    ██");
+	borderControl(menuScreen);
+	menuFunc(21, 1, menuScreen, CHARACTER_SELECT, CARTAL, "Cartal, the Cursed");
+	menuFunc(1, 36, menuScreen, CHARACTER_SELECT, KANIEL, "Kaniel, the Fallen Angel");
+	menuFunc(21, 36, menuScreen, CHARACTER_SELECT, ALBERT, "Albert, the Bloody Knight");
+	menuFunc(1, 71, menuScreen, CHARACTER_SELECT, PH1, "Albert, the Bloody Knight");
+	menuFunc(21, 71, menuScreen, CHARACTER_SELECT, PH2, "Albert, the Bloody Knight");
+	menuFunc(1, 106, menuScreen, CHARACTER_SELECT, PH3, "Albert, the Bloody Knight");
+	menuFunc(21, 106, menuScreen, CHARACTER_SELECT, PH4, "Albert, the Bloody Knight");
+	
+	//wgetch(menuScreen);
+	return menuType;
+}
+
+int menumenu::mainMenuMove()
+{
+	int keypressed;
+	bool inloop=true;
+	menu=0;
+	menuX=0;
+	while(inloop==true)
+	{
+		if(gameBootedUpFirstTime==true) 
+		{
+			gameBootedUpFirstTime=false;
+			mainMenu();
+		}
+		keypressed=getch();
+		//refreshMainScreen();
+		//causes flickering
+		switch(keypressed)
+		{
+			case KEY_UP:
+				menu--;
+				if(menu<=0) menu=0;
+				break;
+			case KEY_DOWN:
+				menu++;
+				if(menu>=menuLimitY) menu=menuLimitY;
+				break;
+			case KEY_RIGHT:
+				menuX++;
+				if(menuX>=menuLimitX) menuX=menuLimitX;
+				break;
+			case KEY_LEFT:
+				menuX--;
+				if(menuX<=0) menuX=0;
+				break;
+			case 10: //KEY_ENTER
+				enterpressed=true;
+				switch(menuType)
+				{
+					case MAIN_MENU:
+						menuType=mainMenu();
+						break;
+					case SETTINGS:
+						menuType=settings();
+						break;
+					case GRAPHICS:
+						menuType=graphics();
+						break;
+					case COLOR_SELECT:
+						menuType=colorSelect();
+						break;
+					case WINDOW_SIZE:
+						menuType=windowSize();
+						break;
+					case CREDITS:
+						menuType=credits();
+						break;
+					case RESET:
+						menuType=resetSettings();
+						break;
+					case AUDIO:
+						menuType=audio();
+						break;
+					case EXIT: //might do something with this
+						break;
+					case NEW_GAME: //and this one, idk tho
+						play();
+						break;
+				}
+				menu=0; 
+				enterpressed=false;
+				break;
+			default: break;
+		}
+		switch(menuType)
+		{
+			case MAIN_MENU:
+				mainMenu();
+				break;
+			case SETTINGS: 
+				settings();
+				break;
+			case CREDITS: 
+				credits();
+				break;
+			case GRAPHICS:
+				graphics();
+				break;
+			case COLOR_SELECT:
+				colorSelect();
+				break;
+			case WINDOW_SIZE:
+				windowSize();
+				break;
+			case EXIT: 
+				return EXIT;
+			case NEW_GAME:
+				return NEW_GAME;
+		}
+		//borderControl(mainscreen);
+		wrefresh(mainscreen);
+	}
+	return 0;
+}
+
+/*
+int menumenu::menuMove(int menuYincrease, int menuXincrease)
+{
+	int keypressed;
+	bool inloop=true;
+	menu=0;
+	menuX=0;
+	while(inloop==true)
+	{
+		keypressed=getch();
+		//refreshMainScreen();
+		//causes flickering
+		switch(keypressed)
+		{
+			case KEY_UP:
+				menu=menu-menuYincrease;
+				if(menu<=0) menu=0;
+				break;
+			case KEY_DOWN:
+				menu=menu+menuYincrease;
+				if(menu>=menuLimitY) menu=menuLimitY;
+				break;
+			case KEY_RIGHT:
+				menuX=menuX+menuXincrease;
+				if(menuX>=menuLimitX) menuX=menuLimitX;
+				break;
+			case KEY_LEFT:
+				menuX=menuX-menuXincrease;
+				if(menuX<=0) menuX=0;
+				break;
+			case 10: //KEY_ENTER
+				enterpressed=true;
+				menuType=func();
+				menu=0; 
+				enterpressed=false;
+				break;
+			default: break;
+		}
+		func();
+		//borderControl(mainscreen);
+		wrefresh(mainscreen);
+	}
+	return 0;
+}
+*/
+int menumenu::characterSelectMove()
+{
+	int keypressed;
+	bool inloop=true;
+	menu=0;
+	menuX=0;
+	while(inloop==true)
+	{
+		keypressed=getch();
+		//refreshMainScreen();
+		//causes flickering
+		switch(keypressed)
+		{
+			case KEY_UP:
+				menu=menu-20;
+				if(menu<=0) menu=0;
+				break;
+			case KEY_DOWN:
+				menu=menu+20;
+				if(menu>=menuLimitY) menu=menuLimitY;
+				break;
+			case KEY_RIGHT:
+				menuX=menuX+35;
+				if(menuX>=menuLimitX) menuX=menuLimitX;
+				break;
+			case KEY_LEFT:
+				menuX=menuX-35;
+				if(menuX<=0) menuX=0;
+				break;
+			case 10: //KEY_ENTER
+				enterpressed=true;
+				switch(menuType)
+				{
+					case CHARACTER_SELECT:
+						menuType=characterSelect();
+						break;
+					case BIENE:
+						//playerCharacter=BIENE;
+						playBiene();
+						break;
+				menu=0; 
+				enterpressed=false;
+				break;
+				}
+			default: break;
+		}
+		characterSelect();
+		wrefresh(mainscreen);
+	}
+	return 0;
+}
+
+void menumenu::interaction(int interactionItem, int interactionPlace, int interactionCharacter)
+{
+
+}
+
+void menumenu::playBiene()
+{
+	werase(menuScreen);
+	borderControl(mainscreen);
+	chatAdder=1;
+	bool bieneLoop=true;
+	
+	location=INN_EMPIRE_ROOMA;
+	wmvprintw(mainscreen, chatAdder, 1, "Exiled from the Hive after the uprising of your sister, you wander through the streets of the");chatAdder++;
+	wmvprintw(mainscreen, chatAdder, 1, "Human Empire, almost broke with little fame to your name aside from your impressive height.");chatAdder++;
+	wmvprintw(mainscreen, chatAdder, 1, "...");chatAdder++;
+	wmvprintw(mainscreen, chatAdder, 1, "You wake up in an inn, the nightmares of the last day at the Hive plaguing your mind.");chatAdder++;
+	wmvprintw(mainscreen, chatAdder, 1, "Your temporary adobe has your trusty Hammer-Spear, an Apple and your Coat.");chatAdder++;
+	wmvprintw(mainscreen, chatAdder, 1, "..."); chatAdder++;
+	wmvprintw(mainscreen, chatAdder, 1, "Commands: look, take, go, speak."); chatAdder++;
+	
+	while (bieneLoop==true)
+	{
+		switch(location)
+		{
+			case INN_EMPIRE_ROOMA:
+				wmvprintw(mainscreen, chatAdder, 1, "...");chatAdder++;
+				
+			
+		}
+	}
+	//interactionBiene();
+
+}
+int menumenu::menuInitialise()
+{
+	//werase(mainscreen);
+	skullart1();
+	wtitle(mainscreen);
+	enterpressed=false;
+	menu=0; menuX=0;
+	menuType=MAIN_MENU; //0
+	mainMenu();
+	wrefresh(mainscreen);
+	//borderControl(mainscreen);
+	int gamestate=0; //0 is menu
+	while(gamestate==0) // 4 is NEW_GAME
+	{ //3 is exit
+		gamestate=mainMenuMove();
+	}
+	return gamestate;
+}
+
+void menumenu::help(int helprequest)
+{
+	switch(helprequest)
+	{
+		case COMMANDS:
+			wmvprintw(mainscreen, chatAdder, 1, "look, take, go, speak"); chatAdder++;
+			break;
+	}
+}
+
+int menumenu::play()
+{
+	int bufferX=bufferXmenu;
+	int bufferY=bufferYmenu;
+	bufferX=titlePlacement(bufferX); //same as x
+	//update the placement!
+	cleanUp(mainscreen,0,0);
+	wrefresh(mainscreen);
+	napms(textSpeed);
+	wmvprintw(mainscreen, titleBufferY+00, 1+titleStartx/2, "Welcome to Terror, a world where the powers that");
+	wrefresh(mainscreen);
+	napms(textSpeed);
+	wmvprintw(mainscreen, titleBufferY+01, 1+titleStartx/2, "rule are in decline and the entire world is about to flip");
+	wrefresh(mainscreen);
+	napms(textSpeed);
+	wmvprintw(mainscreen, titleBufferY+02, 1+titleStartx/2, "upside down, and only the worthy shall live to tell the");
+	wrefresh(mainscreen);
+	napms(textSpeed);
+	wmvprintw(mainscreen, titleBufferY+03, 1+titleStartx/2, "tale... Will you rise to the challenge?");
+	wrefresh(mainscreen);
+	napms(textSpeed);
+	
+//	Map map;
+//	map.mapMove();
+	
+	wgetch(mainscreen);
+	
+	menuType=CHARACTER_SELECT;
+	characterSelect();
+	characterSelectMove();
+	
+
+	//menuMove(20, 35, characterSelect);
+	
+	
+	WINDOW *tempScreen;
+	tempScreen=create_newwin(6, 50, bufferY, bufferX);
+	wmvprintw(tempScreen, 1, 1, "Enter your name:");
+	//wgetstr(tempScreen, playerName);
+	//cin<<playerName;
+	//wmvprintw(tempScreen, 2, 1, playerName);
+	wgetch(tempScreen);
+	
+	//wmvprintw(mainscreen, titleBufferY+04, tit)
+	return 0; //CHANGE THIS
+}

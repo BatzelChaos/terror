@@ -1,3 +1,6 @@
+#pragma once
+
+//MENU
 #define MAIN_MENU 0
 #define SETTINGS 1
 #define CREDITS 2
@@ -10,34 +13,77 @@
 #define BACK 9
 #define WINDOW_SIZE 18
 #define COLOR_SELECT 19
+#define CHARACTER_SELECT 20
 
+//BATTLE
 #define ATTACK 100
 #define ITEMS 101
 #define STATUS 102
 #define RUN 103
+#define BATTLE_END 104
 
-void wmvprintw(WINDOW *screen, int y, int x, const char *text)
+//HELP
+#define COMMANDS 300
 
-{
-	wmove(screen, y, x);
-	wprintw(screen, "%s", text);
-}
 
-WINDOW *create_newwin(int height, int width, int starty, int startx)
-{
-	WINDOW *local_win;
-			
-	local_win=newwin(height,width,starty,startx);
-	wborder(local_win,'|','|','-','-','o','o','o','o');
-	wrefresh(local_win);
-			
-	return local_win;
-}
+//CHARACTERS
+#define BIENE 400
+#define KANIEL 401
+#define CARTAL 402
+#define ALBERT 403
+#define PH1 404
+#define PH2 405
+#define PH3 406
+#define PH4 407
+
+//ITEMS
+#define COAT_BIENE 500
+#define APPLE 501
+#define HAMMER_SPEAR_BIENE 502
+#define HONEY 504
+#define LESSER_HEALING_POTION 505
+#define MEDIUMHEALING_POTION 506
+#define GREATER_HEALING_POTION 507
+#define MAX_HEALING_POTION 508
+
+//LOCATIONS
+#define INN_EMPIRE 1000
+#define INN_EMPIRE_ROOMA 1001
+#define INN_EMPIRE_ROOMB 1002
+#define STORE_EMPIRE 1100
+#define DUNGEON_NEARBY_EMPIRE_A 1200
+
+
+#include <iostream>
+#include <fstream>
+#include <termios.h>
+#include <ncurses.h>
+#include <stdlib.h>
+#include <string.h>
+#include <vector>
+#include <cstdlib>
+#include <functional>
+#include "rapidxml.hpp"
+
+
+#include "menumenu.h"
+#include "npc.h"
+#include "player.h"
+#include "battlescene.h"
+#include "map.h"
+
+
+//int playerCharacter;
+
+
+
+using namespace std;
+
+void wmvprintw(WINDOW *screen, int y, int x, const char *text);
+
+WINDOW *create_newwin(int height, int width, int starty, int startx);
 		
-int random(int r)
-{
-	return rand()%r;
-}
+int random(int r);
 
 /*
 enum class KW {
@@ -47,32 +93,69 @@ enum class KW {
 KW::MENU
 */
 
-//MAKE A RECURSIVE SELF-GENERATING MENU SCREEN TEMPLATE
-//SO I CAN WRITE A SIMPLE menu("a", gotoX, "b", gotoY) THEN GET THE
-//INTENDED SELECTION BOXES AND MAKE THEM GO TO THE INTENDED PLACES
 
-template <typename T> T menuMove(T t)
+/*
+
+struct MenuItem
 {
-	WINDOW *tempScreen;
-	int bufferX=15;
-	int bufferY=25;
-	bufferX=titlePlacement(bufferX); //same as x
-	tempScreen=create_newwin(8, 20, bufferY, bufferX);
-	wmvprintw(tempScreen, 1, 1, "New Game");
-	wmvprintw(tempScreen, 2, 1, "Settings");
-	wmvprintw(tempScreen, 3, 1, "Credits");
-	wmvprintw(tempScreen, 4, 1, "Exit");
-	switch(t)
-	{
-		case t: 
-			wmove(tempScreen, 1, 1);
-			wattron(tempScreen, A_STANDOUT);
-			wprintw(tempScreen,"New Game");
-			wattroff(tempScreen, A_STANDOUT);
-			wrefresh(tempScreen);
-			if (enterpressed==true) return NEW_GAME; 
-			break;
-		} 
-	wrefresh(tempScreen);
-	return MAIN_MENU;
+	bool enterpressed;
+	int windowType;
+	int textPosition;
+	int menu;
+	int caseVar;
+	const char* textVar;
+	int returnVar;
+};
+
+template <typename... Items> int menuFunc(Items... items)
+{
+	static_assert((std::is_same_v<Items, MenuItem> && ...), "All arguments must be MenuItem");
+	
+	int screenHeight = 45; int screenWidth = 150; //MAKE THESE DYNAMIC SOMEDAY ALONG WITH THE ONE IN TERROR.CPP
+	int textBoxPosY, textBoxPosX, textBoxSizeY, textBoxSizeX;
+	
+    MenuItem arr[] = { items... };
+    for (const auto& items : arr)
+    {
+		WINDOW *tempScreen;
+		tempScreen=create_newwin(textBoxSizeY, textBoxSizeX, textBoxPosY, textBoxPosX);
+		wmvprintw(tempScreen, items.textPosition, 1, items.textVar);
+		switch(items.windowType)
+		{
+			case 0: //MAIN MENU
+				textBoxPosY = 25; textBoxPosX = 35;
+				textBoxSizeY = 8; textBoxSizeX = 20;
+				break;
+			case 1: //BATTLE MENU
+				break;
+			case 2: //INVENTORY
+				break;    
+		}
+		wmove(tempScreen, items.textPosition, 1);
+		wattron(tempScreen, A_STANDOUT);
+		wprintw(tempScreen, "%s", items.textVar);
+		wattroff(tempScreen, A_STANDOUT);
+	
+		
+		
+		//switch(items.menu) //GIVES THE MENU TEXT
+		//{
+		//	case items.caseVar: 
+		//		wmove(tempScreen, items.textPosition, 1);
+		//		wattron(tempScreen, A_STANDOUT);
+		//		wprintw(tempScreen, items.textVar);
+		//		wattroff(tempScreen, A_STANDOUT);
+		//		wrefresh(tempScreen);
+				if (items.enterpressed==true) return items.returnVar; 
+		//		break;
+		//} 
+		wrefresh(tempScreen);
+    }
+	return arr[0].menu;
 }
+*/
+
+
+
+
+
