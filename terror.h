@@ -1,26 +1,5 @@
 #pragma once
 
-//MENU
-#define MAIN_MENU 0
-#define SETTINGS 1
-#define CREDITS 2
-#define EXIT 3
-#define NEW_GAME 4
-
-#define AUDIO 6
-#define GRAPHICS 17
-#define RESET 8
-#define BACK 9
-#define WINDOW_SIZE 18
-#define COLOR_SELECT 19
-#define CHARACTER_SELECT 20
-
-//BATTLE
-#define ATTACK 100
-#define ITEMS 101
-#define STATUS 102
-#define RUN 103
-#define BATTLE_END 104
 
 //HELP
 #define COMMANDS 300
@@ -53,6 +32,46 @@
 #define STORE_EMPIRE 1100
 #define DUNGEON_NEARBY_EMPIRE_A 1200
 
+enum TileType
+{
+	WALL_TILE,
+	EMPTY_TILE,
+	TREASURE_TILE,
+	ENEMY_TILE,
+	DANGER_TILE
+};
+
+enum EnemyNames
+{
+	NONE,
+	SKELETON_LOW,
+	KING_OF_DEAD
+};
+
+enum Menu
+{
+	BATTLE_SELECT,
+	BATTLE_ATTACK,
+	BATTLE_INVENTORY,
+	BATTLE_RUN,
+	BATTLE_END,
+	INVENTORY,
+	
+	MAIN_MENU,
+	SETTINGS,
+	CREDITS,
+	EXIT,
+	NEW_GAME,
+
+	AUDIO,
+	GRAPHICS,
+	RESET,
+	BACK,
+	WINDOW_SIZE,
+	COLOR_SELECT,
+	CHARACTER_SELECT,
+};
+
 
 #include <iostream>
 #include <fstream>
@@ -62,6 +81,7 @@
 #include <string.h>
 #include <vector>
 #include <cstdlib>
+#include <ctime>
 #include <functional>
 #include "rapidxml.hpp"
 
@@ -70,7 +90,9 @@
 #include "npc.h"
 #include "player.h"
 #include "battlescene.h"
+#include "tile.h"
 #include "map.h"
+
 
 
 //int playerCharacter;
@@ -82,8 +104,15 @@ using namespace std;
 void wmvprintw(WINDOW *screen, int y, int x, const char *text);
 
 WINDOW *create_newwin(int height, int width, int starty, int startx);
-		
-int random(int r);
+
+WINDOW *menuFunc_drawWindow(int windowType, int menuLimitY, int menuLimitX);
+
+void menuFunc(int menu, int menuX, int menuType, bool enterpressed, int textPositionY, int textPositionX, WINDOW* tempScreen, int menuVar, int returnVar, const char* textVar);
+
+//int random(int r)
+//{
+//	rand(r);
+//}
 
 /*
 enum class KW {

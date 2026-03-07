@@ -51,8 +51,8 @@ class menumenu
 		void skullart1();
 		
 		//int menuMove(int menuYincrease, int menuXincrease, function<int()> func);		
-		void menuFunc_drawWindow(int windowType);
-		void menuFunc(int textPositionY, int textPositionX, WINDOW* tempScreen, int menuVar, int returnVar, const char* textVar);
+		//WINDOW* menuFunc_drawWindow(int windowType);
+		//void menuFunc(int textPositionY, int textPositionX, WINDOW* tempScreen, int menuVar, int returnVar, const char* textVar);
 		
 		int mainMenu();
 		int credits();

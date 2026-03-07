@@ -1,6 +1,8 @@
 #include "terror.h"
 
 
+using namespace std;
+
 WINDOW *create_newwin(int height, int width, int starty, int startx)
 {
 	WINDOW *local_win;
@@ -18,41 +20,82 @@ void wmvprintw(WINDOW *screen, int y, int x, const char *text)
 	wmove(screen, y, x);
 	wprintw(screen, "%s", text);
 }
-
-int random(int r)
+WINDOW* menuFunc_drawWindow(int windowType, int menuLimitY, int menuLimitX)
 {
-	return rand()%r;
+	int textBoxPosY, textBoxPosX, textBoxSizeY, textBoxSizeX;
+	WINDOW* menuScreen;
+	
+	switch(windowType)
+	{
+		case MAIN_MENU:
+			textBoxPosY = 15; textBoxPosX = 55;
+			textBoxSizeY = 8; textBoxSizeX = 20;
+			
+			menuLimitY=3; menuLimitX=0;
+			break;
+		case BATTLE_SELECT:
+			textBoxPosY = 30 ; textBoxPosX = 15;
+			textBoxSizeY = 5; textBoxSizeX = 50;
+			
+			menuLimitY=3; menuLimitX=0;
+			break;
+		case INVENTORY:
+			break;    
+		case CREDITS:
+			textBoxPosY = 15; textBoxPosX = 45;
+			textBoxSizeY = 8; textBoxSizeX = 40;
+			
+			menuLimitY=0, menuLimitX=0;
+			break;
+		case CHARACTER_SELECT:
+			textBoxPosY = 1; textBoxPosX = 9;
+			textBoxSizeY = 42; textBoxSizeX = 140;
+			
+			menuLimitY=20; menuLimitX=105;
+			break;
+	}
+	menuScreen=create_newwin(textBoxSizeY, textBoxSizeX, textBoxPosY, textBoxPosX);
+	return menuScreen;
 }
 
-using namespace std;
-using std::vector;
+void menuFunc(int menu, int menuX, int menuType, bool enterpressed, int textPositionY, int textPositionX, WINDOW* tempScreen, int menuVar, int returnVar, const char* textVar)
+{
+	wmvprintw(tempScreen, textPositionY, textPositionX, textVar);
+	if(menu==(textPositionY-1)&&menuX==(textPositionX-1))
+	{
+		wmove(tempScreen, textPositionY, textPositionX);
+		wattron(tempScreen, A_STANDOUT);
+		wprintw(tempScreen, "%s", textVar);
+		wattroff(tempScreen, A_STANDOUT);
+		if (enterpressed==true) 
+		{
 
-/*
-		GOALS:
-		MOVE CLASSES TO THEIR OWN FILE AND FOLDER
-		DRAW A HIERARCHY ON A PAPER OR something
-		FIX CHARACTER SELECTION SCREEN
-
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+			menuType=returnVar;
+			return;
+		}	
+	}
+	if (menuType==CHARACTER_SELECT)
+	{
+		if(menu==(textPositionY*20+1)&&menuX==(textPositionX*35+1))
+		{
+			wmove(tempScreen, textPositionY, textPositionX);
+			wattron(tempScreen, A_STANDOUT);
+			wprintw(tempScreen, "%s", textVar);
+			wattroff(tempScreen, A_STANDOUT);
+			if (enterpressed==true) 
+			{
+	
+				menuType=returnVar;
+				return;
+			}	
+		}
+	}
+	wrefresh(tempScreen);
+}
 
 int main()
 {
+	srand(time(0));
 	bool inloop=true;
 	initscr();
 	refresh();
