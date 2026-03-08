@@ -14,9 +14,9 @@ class Map:public Player
 	
 	Map();
 	
-	void mapMove(int mapID);
+	int mapMove(int mapID, int location[][16], int j, int i);
 	void mapDraw(int mapID);
-	bool collision();
+	int collision();
 	void currentMap();
 	void playerDraw();
 	void playerErase();

@@ -12,7 +12,8 @@ class BattleScene:public npc, public menumenu
 	npc* enemy;
 	int enemyCount;
 	int currentScreenName;
-	int menuLimitX, menuLimitY;
+	int menuLimitXbattle, menuLimitYbattle;
+	int menuLimitXmenu, menuLimitYmenu;
 	//Player&player;
 	
 	BattleScene(int enemyC, int special);

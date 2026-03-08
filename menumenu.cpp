@@ -2,9 +2,6 @@
 
 using namespace std;
 
-bool gameBootedUpFirstTime=true;
-int location;
-int chatAdder;
 
 menumenu::menumenu(int height, int width)
 {
@@ -29,44 +26,6 @@ menumenu::menumenu(int height, int width)
 	
 }
 
-/*
-WINDOW* menumenu::menuFunc_drawWindow(int windowType)
-{
-	int textBoxPosY, textBoxPosX, textBoxSizeY, textBoxSizeX;
-	
-	switch(windowType)
-	{
-		case MAIN_MENU:
-			textBoxPosY = 15; textBoxPosX = titlePlacement(bufferXmenu);
-			textBoxSizeY = 8; textBoxSizeX = 20;
-			
-			menuLimitY=3; menuLimitX=0;
-			break;
-		case BATTLE_SELECT:
-			textBoxPosY = 30 ; textBoxPosX = 15;
-			textBoxSizeY = 5; textBoxSizeX = 50;
-			
-			menuLimitY=3; menuLimitX=0;
-			break;
-		case INVENTORY:
-			break;    
-		case CREDITS:
-			textBoxPosY = 15; textBoxPosX = titlePlacement(bufferXmenu)-10;
-			textBoxSizeY = 8; textBoxSizeX = 40;
-			
-			menuLimitY=0, menuLimitX=0;
-			break;
-		case CHARACTER_SELECT:
-			textBoxPosY = 1; textBoxPosX = 9;
-			textBoxSizeY = 42; textBoxSizeX = 140;
-			
-			menuLimitY=20; menuLimitX=105;
-			break;
-	}
-	menuScreen=create_newwin(textBoxSizeY, textBoxSizeX, textBoxPosY, textBoxPosX);
-	return menuScreen;
-}
-*/
 
 menumenu::menumenu()
 {
@@ -136,7 +95,6 @@ int menumenu::windowSize()
 
 int menumenu::settings()
 {
-	menuFunc_drawWindow(MAIN_MENU, menuLimitY, menuLimitX);
 	menuFunc(menu, menuX, menuType, enterpressed, 1, 1, menuScreen, SETTINGS, RESET, "Reset");
 	menuFunc(menu, menuX, menuType, enterpressed, 2, 1, menuScreen, SETTINGS, AUDIO, "Audio");
 	menuFunc(menu, menuX, menuType, enterpressed, 3, 1, menuScreen, SETTINGS, GRAPHICS, "Graphics");
@@ -147,7 +105,6 @@ int menumenu::settings()
 
 int menumenu::graphics()
 {
-	menuFunc_drawWindow(MAIN_MENU, menuLimitY, menuLimitX);
 	menuFunc(menu, menuX, menuType, enterpressed, 1, 1, menuScreen, GRAPHICS, COLOR_SELECT, "Color Select");
 	menuFunc(menu, menuX, menuType, enterpressed, 2, 1, menuScreen, GRAPHICS, GRAPHICS, "placeholder");
 	menuFunc(menu, menuX, menuType, enterpressed, 3, 1, menuScreen, GRAPHICS, WINDOW_SIZE, "Graphics");
@@ -170,8 +127,6 @@ int menumenu::credits()
 
 int menumenu::mainMenu()
 {   //bool enterpressed,||int textPosition, WINDOW* tempScreen, int menuVar,|| int returnVar, const char* textVar
-
-	menuFunc_drawWindow(MAIN_MENU, menuLimitY, menuLimitX);
 	menuFunc(menu, menuX, menuType, enterpressed, 1, 1, menuScreen, MAIN_MENU, NEW_GAME, "New Game");
 	menuFunc(menu, menuX, menuType, enterpressed, 2, 1, menuScreen, MAIN_MENU, SETTINGS, "Settings");
 	menuFunc(menu, menuX, menuType, enterpressed, 3, 1, menuScreen, MAIN_MENU, CREDITS, "Credits");
@@ -213,6 +168,7 @@ int menumenu::characterSelect()
 	menuFunc(menu, menuX, menuType, enterpressed, 1, 106, menuScreen, CHARACTER_SELECT, PH3, "Albert, the Bloody Knight");
 	menuFunc(menu, menuX, menuType, enterpressed, 21, 106, menuScreen, CHARACTER_SELECT, PH4, "Albert, the Bloody Knight");
 	
+	wrefresh(menuScreen);
 	//wgetch(menuScreen);
 	return menuType;
 }
@@ -223,8 +179,11 @@ int menumenu::mainMenuMove()
 	bool inloop=true;
 	menu=0;
 	menuX=0;
+	
 	while(inloop==true)
 	{
+		menuScreen = menuFunc_drawWindow(MAIN_MENU, menuLimitY, menuLimitX);
+		
 		if(gameBootedUpFirstTime==true) 
 		{
 			gameBootedUpFirstTime=false;
@@ -375,6 +334,7 @@ int menumenu::characterSelectMove()
 	menuX=0;
 	while(inloop==true)
 	{
+		menuScreen = menuFunc_drawWindow(CHARACTER_SELECT, menuLimitY, menuLimitX);
 		//refreshMainScreen();
 		//causes flickering
 		switch(keypressed)
@@ -413,8 +373,8 @@ int menumenu::characterSelectMove()
 			default: break;
 		}
 		characterSelect();
-		wrefresh(mainscreen);
 		keypressed=getch();
+		wrefresh(mainscreen);
 		
 	}
 	return 0;
@@ -428,11 +388,13 @@ void menumenu::interaction(int interactionItem, int interactionPlace, int intera
 void menumenu::playBiene()
 {
 	werase(mainscreen);
-	//borderControl(mainscreen);
+	borderControl(mainscreen);
+	wrefresh(mainscreen);
+	
 	chatAdder=1;
 	bool bieneLoop=true;
+	int y=0; int x=0;
 	
-	location=INN_EMPIRE_ROOMA;
 	wmvprintw(mainscreen, chatAdder, 1, "Exiled from the Hive after the uprising of your sister, you wander through the streets of the");chatAdder++;
 	wmvprintw(mainscreen, chatAdder, 1, "Human Empire, almost broke with little fame to your name aside from your impressive height.");chatAdder++;
 	wmvprintw(mainscreen, chatAdder, 1, "...");chatAdder++;
@@ -441,12 +403,22 @@ void menumenu::playBiene()
 	wmvprintw(mainscreen, chatAdder, 1, "..."); chatAdder++;
 	wmvprintw(mainscreen, chatAdder, 1, "Commands: look, take, go, speak."); chatAdder++;
 	
+	Map map;
+	
 	while (bieneLoop==true)
 	{
-		switch(location)
+
+		switch(location[y][x])
 		{
+			case INN_EMPIRE:
+				wmvprintw(mainscreen, chatAdder, 1, "...");chatAdder++;
+				location[y][x] = map.mapMove(INN_EMPIRE, location, y, x);
+				break;
 			case INN_EMPIRE_ROOMA:
 				wmvprintw(mainscreen, chatAdder, 1, "...");chatAdder++;
+				location[y][x] = map.mapMove(INN_EMPIRE_ROOMA, location, y, x);
+				break;
+			
 				
 			
 		}
@@ -459,10 +431,11 @@ int menumenu::menuInitialise()
 	//werase(mainscreen);
 	skullart1();
 	wtitle(mainscreen);
+	
 	enterpressed=false;
 	menu=0; menuX=0;
 	menuType=MAIN_MENU; //0
-	mainMenu();
+	mainMenuMove();
 	wrefresh(mainscreen);
 	//borderControl(mainscreen);
 	int gamestate=0; //0 is menu
@@ -492,6 +465,8 @@ int menumenu::play()
 	werase(mainscreen);
 	borderControl(mainscreen);
 	
+	mapIndexingInit();
+	
 	wrefresh(mainscreen);
 	napms(textSpeed);
 	wmvprintw(mainscreen, titleBufferY+00, 1+titleStartx/2, "Welcome to Terror, a world where the powers that");
@@ -506,9 +481,10 @@ int menumenu::play()
 	wmvprintw(mainscreen, titleBufferY+03, 1+titleStartx/2, "tale... Will you rise to the challenge?");
 	wrefresh(mainscreen);
 	napms(textSpeed);
+	wmvprintw(mainscreen, titleBufferY+05, 1+titleStartx/2, "[ PRESS ANY KEY TO CONTINUE... ]");
+	wrefresh(mainscreen);
+	napms(textSpeed);
 	
-	Map map;
-	map.mapMove(INN_EMPIRE);
 
 	
 	wgetch(mainscreen);
@@ -534,4 +510,11 @@ int menumenu::play()
 	
 	//wmvprintw(mainscreen, titleBufferY+04, tit)
 	return 0; //CHANGE THIS
+}
+
+void menumenu::mapIndexingInit()
+{
+	location[0][0]=INN_EMPIRE;
+	location[0][1]=INN_EMPIRE_ROOMA;
+	location[0][2]=INN_EMPIRE_ROOMB;
 }

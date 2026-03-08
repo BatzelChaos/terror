@@ -20,7 +20,7 @@ void wmvprintw(WINDOW *screen, int y, int x, const char *text)
 	wmove(screen, y, x);
 	wprintw(screen, "%s", text);
 }
-WINDOW* menuFunc_drawWindow(int windowType, int menuLimitY, int menuLimitX)
+WINDOW* menuFunc_drawWindow(int windowType, int& menuLimitY, int& menuLimitX)
 {
 	int textBoxPosY, textBoxPosX, textBoxSizeY, textBoxSizeX;
 	WINDOW* menuScreen;
@@ -28,14 +28,14 @@ WINDOW* menuFunc_drawWindow(int windowType, int menuLimitY, int menuLimitX)
 	switch(windowType)
 	{
 		case MAIN_MENU:
-			textBoxPosY = 15; textBoxPosX = 55;
+			textBoxPosY = 20; textBoxPosX = 70;
 			textBoxSizeY = 8; textBoxSizeX = 20;
 			
 			menuLimitY=3; menuLimitX=0;
 			break;
 		case BATTLE_SELECT:
-			textBoxPosY = 30 ; textBoxPosX = 15;
-			textBoxSizeY = 5; textBoxSizeX = 50;
+			textBoxPosY = 34 ; textBoxPosX = 10;
+			textBoxSizeY = 8; textBoxSizeX = 103;
 			
 			menuLimitY=3; menuLimitX=0;
 			break;
@@ -53,12 +53,19 @@ WINDOW* menuFunc_drawWindow(int windowType, int menuLimitY, int menuLimitX)
 			
 			menuLimitY=20; menuLimitX=105;
 			break;
+			
+		case BATTLE:
+			textBoxPosY = 9; textBoxPosX = 8;
+			textBoxSizeY = 34; textBoxSizeX = 107;
+			
+			menuLimitY=0; menuLimitX=4;
+			break;
 	}
 	menuScreen=create_newwin(textBoxSizeY, textBoxSizeX, textBoxPosY, textBoxPosX);
 	return menuScreen;
 }
 
-void menuFunc(int menu, int menuX, int menuType, bool enterpressed, int textPositionY, int textPositionX, WINDOW* tempScreen, int menuVar, int returnVar, const char* textVar)
+void menuFunc(int menu, int menuX, int& menuType, bool enterpressed, int textPositionY, int textPositionX, WINDOW* tempScreen, int menuVar, int returnVar, const char* textVar)
 {
 	wmvprintw(tempScreen, textPositionY, textPositionX, textVar);
 	if(menu==(textPositionY-1)&&menuX==(textPositionX-1))

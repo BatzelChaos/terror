@@ -2,13 +2,18 @@
 
 BattleScene::BattleScene(int enemyC, int special)
 {
+	/*
 	int screenHeight=30;
 	int screenWidth=100;
 	int starty=(LINES-screenHeight)/2;
 	int startx=(COLS-screenWidth)/2-20;
 	
 	battleScreen=create_newwin(screenHeight,screenWidth,starty,startx);
-	battleMenu=menuFunc_drawWindow(BATTLE_SELECT, menuLimitY, menuLimitX);
+	*/
+	battleScreen=menuFunc_drawWindow(BATTLE, menuLimitYbattle, menuLimitXbattle);
+	battleMenu=menuFunc_drawWindow(BATTLE_SELECT, menuLimitYmenu, menuLimitXmenu);
+	
+	//careful, both uses the same variable as menu limit!
 	
 	enemyCount=enemyC;
 	enemy= new npc[enemyCount];
@@ -117,7 +122,6 @@ void BattleScene::hpbar()
 		const char* hp = a.c_str();
 		wmvprintw(battleScreen, buffer1+i, 4, hp);
 
-		//ADD HP BARS I CAN'T THINK RN
 
 		//int localhp=enemy[i].hp;
 		//float mappedhp;

@@ -7,8 +7,9 @@ Map::Map()
 	Tile* tile;
 }
 
-void Map::mapMove(int mapID)
+int Map::mapMove(int mapID, int location[][16], int j, int i)
 {
+	
 	int keypressed;
 	int enterpressed;
 	bool inloop=true;
@@ -55,12 +56,21 @@ void Map::mapMove(int mapID)
 				break;
 			default: break;
 		}
+		switch(collision())
+		{
+			case NORTH: return location[j+1][i];
+			case EAST: return location[j][i+1];
+			case WEST: return location[j][i-1];
+			case SOUTH: return location[j-1][i];
+			default: break;
+		}
 		playerDraw();
 		wrefresh(mapScreen);
 		keypressed=getch();
 		
 		
 	}
+	return 0;
 }
 
 void Map::mapDraw(int mapID)
@@ -86,7 +96,7 @@ void Map::playerErase()
 	wmvprintw(mapScreen, playerPositionY, playerPositionX*2, "  ");
 }
 
-bool Map::collision()
+int Map::collision()
 {
 	/*
 	if (playerPositionY < 0 || playerPositionY >= 16 ||
@@ -100,11 +110,20 @@ bool Map::collision()
 	{
 		case EMPTY_TILE: return false; 
 		case WALL_TILE: return true;
+		case TRANSITION_TILE_NORTH: return NORTH;
+		case TRANSITION_TILE_EAST: return EAST;
+		case TRANSITION_TILE_WEST: return WEST;
+		case TRANSITION_TILE_SOUTH: return SOUTH;
 		case ENEMY_TILE:
-			BattleScene battle(2, KING_OF_DEAD);
-			battle.battleMove();
-			tile.noMoreEnemyTile(mapIndex[playerPositionY][playerPositionX]);
-			return true;
+		{
+		    BattleScene* battle = new BattleScene(2, KING_OF_DEAD);
+		    //MAKE THE ENENMY ENCOUNTERS DYNAMIC
+		    battle->battleSelect();
+		    battle->battleMove();
+		    tile.noMoreEnemyTile(mapIndex[playerPositionY][playerPositionX]);
+		    delete battle;
+		    return true;
+		}
 	}
 	return false;
 }

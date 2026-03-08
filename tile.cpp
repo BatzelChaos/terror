@@ -59,7 +59,18 @@ void Tile::tileDraw(int y, int x,TileType tileEnter, WINDOW* mapScreen)
 		case DANGER_TILE:
 			wmvprintw(mapScreen, y, x, "!!");
 			break;
-		
+		case TRANSITION_TILE_NORTH:
+			wmvprintw(mapScreen, y, x, "^^");
+			break;
+		case TRANSITION_TILE_EAST:
+			wmvprintw(mapScreen, y, x, "->");
+			break;
+		case TRANSITION_TILE_WEST:
+			wmvprintw(mapScreen, y, x, "<-");
+			break;
+		case TRANSITION_TILE_SOUTH:
+			wmvprintw(mapScreen, y, x, "VV");
+			break;
 	}
 }
 
@@ -76,7 +87,7 @@ void Tile::tileMap(int mapID, int mapIndex[][16], WINDOW* mapScreen)
 			switch(mapID)
 			{
 				case INN_EMPIRE:
-					if(ytile==2||ytile==14)
+					if(ytile==1||ytile==14)
 					{
 						tileDraw(ytile, xtile, WALL_TILE, mapScreen);
 						mapIndex[yscreen][xscreen]=WALL_TILE;
@@ -85,6 +96,11 @@ void Tile::tileMap(int mapID, int mapIndex[][16], WINDOW* mapScreen)
 					{
 						tileDraw(ytile, xtile, ENEMY_TILE, mapScreen);
 						mapIndex[yscreen][xscreen]=ENEMY_TILE;
+					}
+					if(xtile==28&&ytile==7)
+					{
+						tileDraw(ytile, xtile, TRANSITION_TILE_EAST, mapScreen);
+						mapIndex[yscreen][xscreen]=TRANSITION_TILE_EAST;
 					}
 					break;
 			}
@@ -100,6 +116,11 @@ int Tile::tileCollision(int playerPosY, int playerPosX, int mapIndex[][16])
 		case EMPTY_TILE: return EMPTY_TILE;
 		case WALL_TILE: return WALL_TILE;
 		case ENEMY_TILE: return ENEMY_TILE;
+		case TRANSITION_TILE_NORTH: return TRANSITION_TILE_NORTH;
+		case TRANSITION_TILE_EAST : return TRANSITION_TILE_EAST;
+		case TRANSITION_TILE_WEST : return TRANSITION_TILE_WEST;
+		case TRANSITION_TILE_SOUTH: return TRANSITION_TILE_SOUTH;
+
 	}
 	return EMPTY_TILE;
 }

@@ -25,12 +25,15 @@
 #define GREATER_HEALING_POTION 507
 #define MAX_HEALING_POTION 508
 
-//LOCATIONS
-#define INN_EMPIRE 1000
-#define INN_EMPIRE_ROOMA 1001
-#define INN_EMPIRE_ROOMB 1002
-#define STORE_EMPIRE 1100
-#define DUNGEON_NEARBY_EMPIRE_A 1200
+enum Locations
+{
+	INN_EMPIRE,
+	INN_EMPIRE_ROOMA,
+	INN_EMPIRE_ROOMB,
+	STORE_EMPIRE,
+	DUNGEON_NEARBY_EMPIRE_A,
+	DUNGEON_NEARBY_EMPIRE_B
+};
 
 enum TileType
 {
@@ -38,7 +41,17 @@ enum TileType
 	EMPTY_TILE,
 	TREASURE_TILE,
 	ENEMY_TILE,
-	DANGER_TILE
+	DANGER_TILE,
+
+	TRANSITION_TILE_NORTH,
+	NORTH,
+	TRANSITION_TILE_EAST,
+	EAST,
+	TRANSITION_TILE_WEST,
+	WEST,
+	TRANSITION_TILE_SOUTH,
+	SOUTH
+	
 };
 
 enum EnemyNames
@@ -50,6 +63,7 @@ enum EnemyNames
 
 enum Menu
 {
+	BATTLE,
 	BATTLE_SELECT,
 	BATTLE_ATTACK,
 	BATTLE_INVENTORY,
@@ -105,9 +119,9 @@ void wmvprintw(WINDOW *screen, int y, int x, const char *text);
 
 WINDOW *create_newwin(int height, int width, int starty, int startx);
 
-WINDOW *menuFunc_drawWindow(int windowType, int menuLimitY, int menuLimitX);
+WINDOW *menuFunc_drawWindow(int windowType, int& menuLimitY, int& menuLimitX);
 
-void menuFunc(int menu, int menuX, int menuType, bool enterpressed, int textPositionY, int textPositionX, WINDOW* tempScreen, int menuVar, int returnVar, const char* textVar);
+void menuFunc(int menu, int menuX, int& menuType, bool enterpressed, int textPositionY, int textPositionX, WINDOW* tempScreen, int menuVar, int returnVar, const char* textVar);
 
 //int random(int r)
 //{
