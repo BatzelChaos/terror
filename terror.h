@@ -103,6 +103,7 @@ enum Menu
 #include "menumenu.h"
 #include "npc.h"
 #include "player.h"
+#include "inventory.h"
 #include "battlescene.h"
 #include "tile.h"
 #include "map.h"
@@ -119,9 +120,11 @@ void wmvprintw(WINDOW *screen, int y, int x, const char *text);
 
 WINDOW *create_newwin(int height, int width, int starty, int startx);
 
+void menuFunc_secondaryFunc(int menu, int menuX, int& menuType, bool enterpressed, int textPositionY, int textPositionX, WINDOW* tempScreen, int returnVar, const char* textVar);
+
 WINDOW *menuFunc_drawWindow(int windowType, int& menuLimitY, int& menuLimitX);
 
-void menuFunc(int menu, int menuX, int& menuType, bool enterpressed, int textPositionY, int textPositionX, WINDOW* tempScreen, int menuVar, int returnVar, const char* textVar);
+void menuFunc(int menu, int menuX, int& menuType, bool enterpressed, int textPositionY, int textPositionX, WINDOW* tempScreen, int returnVar, const char* textVar);
 
 //int random(int r)
 //{

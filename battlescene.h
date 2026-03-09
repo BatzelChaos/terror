@@ -19,6 +19,7 @@ class BattleScene:public npc, public menumenu
 	BattleScene(int enemyC, int special);
 	void hpbar();
 	void battle();
+	void battleEnemyRender(int ID, int position);
 	
 	int battleMove();
 	int battleSelect();

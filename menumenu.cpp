@@ -95,20 +95,20 @@ int menumenu::windowSize()
 
 int menumenu::settings()
 {
-	menuFunc(menu, menuX, menuType, enterpressed, 1, 1, menuScreen, SETTINGS, RESET, "Reset");
-	menuFunc(menu, menuX, menuType, enterpressed, 2, 1, menuScreen, SETTINGS, AUDIO, "Audio");
-	menuFunc(menu, menuX, menuType, enterpressed, 3, 1, menuScreen, SETTINGS, GRAPHICS, "Graphics");
-	menuFunc(menu, menuX, menuType, enterpressed, 4, 1, menuScreen, SETTINGS, MAIN_MENU, "Back");
+	menuFunc(menu, menuX, menuType, enterpressed, 1, 1, menuScreen, RESET, "Reset");
+	menuFunc(menu, menuX, menuType, enterpressed, 2, 1, menuScreen, AUDIO, "Audio");
+	menuFunc(menu, menuX, menuType, enterpressed, 3, 1, menuScreen, GRAPHICS, "Graphics");
+	menuFunc(menu, menuX, menuType, enterpressed, 4, 1, menuScreen, MAIN_MENU, "Back");
 
 	return menuType;
 }
 
 int menumenu::graphics()
 {
-	menuFunc(menu, menuX, menuType, enterpressed, 1, 1, menuScreen, GRAPHICS, COLOR_SELECT, "Color Select");
-	menuFunc(menu, menuX, menuType, enterpressed, 2, 1, menuScreen, GRAPHICS, GRAPHICS, "placeholder");
-	menuFunc(menu, menuX, menuType, enterpressed, 3, 1, menuScreen, GRAPHICS, WINDOW_SIZE, "Graphics");
-	menuFunc(menu, menuX, menuType, enterpressed, 4, 1, menuScreen, GRAPHICS, SETTINGS, "Back");
+	menuFunc(menu, menuX, menuType, enterpressed, 1, 1, menuScreen, COLOR_SELECT, "Color Select");
+	menuFunc(menu, menuX, menuType, enterpressed, 2, 1, menuScreen, GRAPHICS, "placeholder");
+	menuFunc(menu, menuX, menuType, enterpressed, 3, 1, menuScreen, WINDOW_SIZE, "Graphics");
+	menuFunc(menu, menuX, menuType, enterpressed, 4, 1, menuScreen, SETTINGS, "Back");
 
 	return menuType;
 }
@@ -116,8 +116,8 @@ int menumenu::graphics()
 int menumenu::credits()
 {
 	menuFunc_drawWindow(CREDITS, menuLimitY, menuLimitX);
-	menuFunc(menu, menuX, menuType, enterpressed, 1, 1, menuScreen, CREDITS, MAIN_MENU, "Everything: BatzelChaos (ME!)");
-	menuFunc(menu, menuX, menuType, enterpressed, 2, 1, menuScreen, CREDITS, MAIN_MENU, "Special thanks to the ncurses\n library and all the tutorials");
+	menuFunc(menu, menuX, menuType, enterpressed, 1, 1, menuScreen, MAIN_MENU, "Everything: BatzelChaos (ME!)");
+	menuFunc(menu, menuX, menuType, enterpressed, 2, 1, menuScreen, MAIN_MENU, "Special thanks to the ncurses\n library and all the tutorials");
 	wgetch(menuScreen);
 	skullart1();
 	wtitle(mainscreen);
@@ -127,10 +127,10 @@ int menumenu::credits()
 
 int menumenu::mainMenu()
 {   //bool enterpressed,||int textPosition, WINDOW* tempScreen, int menuVar,|| int returnVar, const char* textVar
-	menuFunc(menu, menuX, menuType, enterpressed, 1, 1, menuScreen, MAIN_MENU, NEW_GAME, "New Game");
-	menuFunc(menu, menuX, menuType, enterpressed, 2, 1, menuScreen, MAIN_MENU, SETTINGS, "Settings");
-	menuFunc(menu, menuX, menuType, enterpressed, 3, 1, menuScreen, MAIN_MENU, CREDITS, "Credits");
-	menuFunc(menu, menuX, menuType, enterpressed, 4, 1, menuScreen, MAIN_MENU, EXIT, "Exit");
+	menuFunc(menu, menuX, menuType, enterpressed, 1, 1, menuScreen, NEW_GAME, "New Game");
+	menuFunc(menu, menuX, menuType, enterpressed, 2, 1, menuScreen, SETTINGS, "Settings");
+	menuFunc(menu, menuX, menuType, enterpressed, 3, 1, menuScreen, CREDITS, "Credits");
+	menuFunc(menu, menuX, menuType, enterpressed, 4, 1, menuScreen, EXIT, "Exit");
 
 	return menuType;
 }
@@ -138,7 +138,7 @@ int menumenu::mainMenu()
 int menumenu::characterSelect()
 {
 	menuFunc_drawWindow(CHARACTER_SELECT, menuLimitY, menuLimitX);
-	menuFunc(menu, menuX, menuType, enterpressed, 1, 1, menuScreen, CHARACTER_SELECT, BIENE, 
+	menuFunc(menu, menuX, menuType, enterpressed, 1, 1, menuScreen, BIENE, 
 	"Biene, the Exiled Princess"
 "\n ████████            ███████████  "
 "\n █████████▓     ▒   ████████████  "
@@ -160,13 +160,13 @@ int menumenu::characterSelect()
 "\n          ██ ▓ ██████    █  █    ██"
 "\n                            █    ██");
 	borderControl(menuScreen);
-	menuFunc(menu, menuX, menuType, enterpressed, 21, 1, menuScreen, CHARACTER_SELECT, CARTAL, "Cartal, the Cursed");
-	menuFunc(menu, menuX, menuType, enterpressed, 1, 36, menuScreen, CHARACTER_SELECT, KANIEL, "Kaniel, the Fallen Angel");
-	menuFunc(menu, menuX, menuType, enterpressed, 21, 36, menuScreen, CHARACTER_SELECT, ALBERT, "Albert, the Bloody Knight");
-	menuFunc(menu, menuX, menuType, enterpressed, 1, 71, menuScreen, CHARACTER_SELECT, PH1, "Albert, the Bloody Knight");
-	menuFunc(menu, menuX, menuType, enterpressed, 21, 71, menuScreen, CHARACTER_SELECT, PH2, "Albert, the Bloody Knight");
-	menuFunc(menu, menuX, menuType, enterpressed, 1, 106, menuScreen, CHARACTER_SELECT, PH3, "Albert, the Bloody Knight");
-	menuFunc(menu, menuX, menuType, enterpressed, 21, 106, menuScreen, CHARACTER_SELECT, PH4, "Albert, the Bloody Knight");
+	menuFunc(menu, menuX, menuType, enterpressed, 21, 1, menuScreen, CARTAL, "Cartal, the Cursed");
+	menuFunc(menu, menuX, menuType, enterpressed, 1, 36, menuScreen, KANIEL, "Kaniel, the Fallen Angel");
+	menuFunc(menu, menuX, menuType, enterpressed, 21, 36, menuScreen, ALBERT, "Albert, the Bloody Knight");
+	menuFunc(menu, menuX, menuType, enterpressed, 1, 71, menuScreen, PH1, "Albert, the Bloody Knight");
+	menuFunc(menu, menuX, menuType, enterpressed, 21, 71, menuScreen, PH2, "Albert, the Bloody Knight");
+	menuFunc(menu, menuX, menuType, enterpressed, 1, 106, menuScreen, PH3, "Albert, the Bloody Knight");
+	menuFunc(menu, menuX, menuType, enterpressed, 21, 106, menuScreen, PH4, "Albert, the Bloody Knight");
 	
 	wrefresh(menuScreen);
 	//wgetch(menuScreen);
@@ -177,8 +177,8 @@ int menumenu::mainMenuMove()
 {
 	int keypressed;
 	bool inloop=true;
-	menu=0;
-	menuX=0;
+	menu=1;
+	menuX=1;
 	
 	while(inloop==true)
 	{
@@ -195,7 +195,7 @@ int menumenu::mainMenuMove()
 		{
 			case KEY_UP:
 				menu--;
-				if(menu<=0) menu=0;
+				if(menu<=1) menu=1;
 				break;
 			case KEY_DOWN:
 				menu++;
@@ -207,7 +207,7 @@ int menumenu::mainMenuMove()
 				break;
 			case KEY_LEFT:
 				menuX--;
-				if(menuX<=0) menuX=0;
+				if(menuX<=1) menuX=1;
 				break;
 			case 10: //KEY_ENTER
 				enterpressed=true;

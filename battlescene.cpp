@@ -2,6 +2,7 @@
 
 BattleScene::BattleScene(int enemyC, int special)
 {
+
 	/*
 	int screenHeight=30;
 	int screenWidth=100;
@@ -13,7 +14,6 @@ BattleScene::BattleScene(int enemyC, int special)
 	battleScreen=menuFunc_drawWindow(BATTLE, menuLimitYbattle, menuLimitXbattle);
 	battleMenu=menuFunc_drawWindow(BATTLE_SELECT, menuLimitYmenu, menuLimitXmenu);
 	
-	//careful, both uses the same variable as menu limit!
 	
 	enemyCount=enemyC;
 	enemy= new npc[enemyCount];
@@ -34,10 +34,12 @@ BattleScene::BattleScene(int enemyC, int special)
 				enemy[i].npcInit(SKELETON_LOW);
 			}
 			enemy[1].npcInit(KING_OF_DEAD);
+			battleEnemyRender(KING_OF_DEAD, 3);
 			break;
 	}
 
 }
+
 
 int BattleScene::battleMove()
 {
@@ -45,6 +47,9 @@ int BattleScene::battleMove()
 	bool inloop=true;
 	menu=0;
 	menuX=0;
+	menuType=BATTLE_SELECT;
+	//menuScreen = menuFunc_drawWindow(BATTLE_SELECT, menuLimitY, menuLimitX);
+		
 	while(inloop==true)
 	{
 		switch(keypressed)
@@ -55,11 +60,11 @@ int BattleScene::battleMove()
 				break;
 			case KEY_DOWN:
 				menu++;
-				if(menu>=enemyCount) menu=enemyCount;
+				if(menu>=menuLimitYmenu) menu=menuLimitYmenu;
 				break;
 			case KEY_RIGHT:
 				menuX++;
-				if(menuX>=0) menuX=0;
+				if(menuX>=menuLimitXmenu) menuX=menuLimitXmenu;
 				break;
 			case KEY_LEFT:
 				menuX--;
@@ -90,7 +95,7 @@ int BattleScene::battleMove()
 				attack();
 				break;
 		}
-		wrefresh(mainscreen);
+		wrefresh(battleMenu);
 		keypressed=getch();
 		
 	}
@@ -100,14 +105,17 @@ int BattleScene::battleMove()
 
 int BattleScene::battleSelect()
 {
-	menuFunc(menu, menuX, menuType, enterpressed, 1,1,battleMenu, BATTLE_SELECT, BATTLE_ATTACK, "Attack");
-	menuFunc(menu, menuX, menuType, enterpressed, 2,1,battleMenu, BATTLE_SELECT, INVENTORY, "Inventory");
+	menuFunc(menu, menuX, menuType, enterpressed, 1,1,battleMenu, BATTLE_ATTACK, "Attack");
+	menuFunc(menu, menuX, menuType, enterpressed, 1,10,battleMenu, INVENTORY, "Inventory");
+	menuFunc(menu, menuX, menuType, enterpressed, 2,1,battleMenu, INVENTORY, "Run");
+	wrefresh(battleMenu);
 	return menuType;
 }
 
 int BattleScene::attack()
 {
-	menuFunc(menu, menuX, menuType, menuType, 2,2, battleMenu, BATTLE_ATTACK, BATTLE_ATTACK, "ENEMY");
+	menuFunc(menu, menuX, menuType, enterpressed, 2,2, battleMenu, BATTLE_ATTACK, "ENEMY");
+	wrefresh(battleMenu);
 	return menuType;
 }
 
@@ -145,7 +153,24 @@ int BattleScene::battleEND()
 	return BATTLE_END;
 }
 
+void BattleScene::battleEnemyRender(int ID, int position)
+{
+	switch(ID)
+	{
+		case KING_OF_DEAD:
+			wmvprintw(battleScreen, 2, position, "    O    ");
+			wmvprintw(battleScreen, 2, position, "    O    ");
+			wmvprintw(battleScreen, 2, position, "    O    ");
+			wmvprintw(battleScreen, 2, position, "    O    ");
+			wmvprintw(battleScreen, 2, position, "    O    ");
+			wmvprintw(battleScreen, 2, position, "    O    ");
+			wmvprintw(battleScreen, 2, position, "    O    ");
+			wmvprintw(battleScreen, 2, position, "    O    ");
+	}
+}
+
 BattleScene::~BattleScene()
 {
 	delete[] enemy;
 }
+

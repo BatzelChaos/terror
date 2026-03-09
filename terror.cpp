@@ -1,6 +1,5 @@
 #include "terror.h"
 
-
 using namespace std;
 
 WINDOW *create_newwin(int height, int width, int starty, int startx)
@@ -20,6 +19,25 @@ void wmvprintw(WINDOW *screen, int y, int x, const char *text)
 	wmove(screen, y, x);
 	wprintw(screen, "%s", text);
 }
+
+void menuFunc_secondaryFunc(int menu, int menuX, int& menuType, bool enterpressed, int textPositionY, int textPositionX, WINDOW* tempScreen, int returnVar, const char* textVar)
+{
+	wmvprintw(tempScreen, textPositionY, textPositionX, textVar);
+	if(menu==(textPositionY)&&menuX==(textPositionX))
+	{
+		wmove(tempScreen, textPositionY, textPositionX);
+		wattron(tempScreen, A_STANDOUT);
+		wprintw(tempScreen, "%s", textVar);
+		wattroff(tempScreen, A_STANDOUT);
+		if (enterpressed==true) 
+		{
+
+			menuType=returnVar;
+			return;
+		}	
+	}
+}
+
 WINDOW* menuFunc_drawWindow(int windowType, int& menuLimitY, int& menuLimitX)
 {
 	int textBoxPosY, textBoxPosX, textBoxSizeY, textBoxSizeX;
@@ -31,15 +49,19 @@ WINDOW* menuFunc_drawWindow(int windowType, int& menuLimitY, int& menuLimitX)
 			textBoxPosY = 20; textBoxPosX = 70;
 			textBoxSizeY = 8; textBoxSizeX = 20;
 			
-			menuLimitY=3; menuLimitX=0;
+			menuLimitY=4; menuLimitX=1;
 			break;
 		case BATTLE_SELECT:
 			textBoxPosY = 34 ; textBoxPosX = 10;
 			textBoxSizeY = 8; textBoxSizeX = 103;
 			
-			menuLimitY=3; menuLimitX=0;
+			menuLimitY=1; menuLimitX=1;
 			break;
 		case INVENTORY:
+			textBoxPosY = 30 ; textBoxPosX = 110;
+			textBoxSizeY = 12; textBoxSizeX = 20;
+			
+			menuLimitY=10; menuLimitX=1;
 			break;    
 		case CREDITS:
 			textBoxPosY = 15; textBoxPosX = 45;
@@ -65,37 +87,47 @@ WINDOW* menuFunc_drawWindow(int windowType, int& menuLimitY, int& menuLimitX)
 	return menuScreen;
 }
 
-void menuFunc(int menu, int menuX, int& menuType, bool enterpressed, int textPositionY, int textPositionX, WINDOW* tempScreen, int menuVar, int returnVar, const char* textVar)
+void menuFunc(int menu, int menuX, int& menuType, bool enterpressed, int textPositionY, int textPositionX, WINDOW* tempScreen, int returnVar, const char* textVar)
 {
-	wmvprintw(tempScreen, textPositionY, textPositionX, textVar);
-	if(menu==(textPositionY-1)&&menuX==(textPositionX-1))
-	{
-		wmove(tempScreen, textPositionY, textPositionX);
-		wattron(tempScreen, A_STANDOUT);
-		wprintw(tempScreen, "%s", textVar);
-		wattroff(tempScreen, A_STANDOUT);
-		if (enterpressed==true) 
-		{
-
-			menuType=returnVar;
-			return;
-		}	
-	}
-	if (menuType==CHARACTER_SELECT)
-	{
-		if(menu==(textPositionY*20+1)&&menuX==(textPositionX*35+1))
-		{
-			wmove(tempScreen, textPositionY, textPositionX);
-			wattron(tempScreen, A_STANDOUT);
-			wprintw(tempScreen, "%s", textVar);
-			wattroff(tempScreen, A_STANDOUT);
-			if (enterpressed==true) 
-			{
 	
-				menuType=returnVar;
-				return;
-			}	
-		}
+	switch(menuType)
+	{
+		case CHARACTER_SELECT:
+			if(menu==(textPositionY*20+1)&&menuX==(textPositionX*35+1))
+			{
+				wmove(tempScreen, textPositionY, textPositionX);
+				wattron(tempScreen, A_STANDOUT);
+				wprintw(tempScreen, "%s", textVar);
+				wattroff(tempScreen, A_STANDOUT);
+				if (enterpressed==true) 
+				{
+		
+					menuType=returnVar;
+					return;
+				}	
+			}
+		break;
+		case BATTLE_SELECT:
+			if(menu==(textPositionY-1)&&menuX==(textPositionX/10))
+			{
+				wmove(tempScreen, textPositionY, textPositionX);
+				wattron(tempScreen, A_STANDOUT);
+				wprintw(tempScreen, "%s", textVar);
+				wattroff(tempScreen, A_STANDOUT);
+				if (enterpressed==true) 
+				{
+		
+					menuType=returnVar;
+					return;
+				}	
+			}
+			break;
+		case BATTLE:
+			//if(menu==)
+			break;
+		default: 
+			menuFunc_secondaryFunc(menu, menuX, menuType, enterpressed, textPositionY, textPositionX, tempScreen, returnVar, textVar);
+			break;
 	}
 	wrefresh(tempScreen);
 }
@@ -113,6 +145,15 @@ int main()
 				 //1 is visible
 				 //2 is very visible
 	menumenu GAME(45,150);
+	
+	BattleScene* battle;
+	Inventory* inventory;
+	
+	battle->battleMove();
+	inventory->inventoryMove();
+	
+	delete battle;
+	delete inventory;
 	
 	int gamestate=GAME.menuInitialise();
 	while(inloop==true)

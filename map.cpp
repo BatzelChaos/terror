@@ -54,6 +54,9 @@ int Map::mapMove(int mapID, int location[][16], int j, int i)
 				playerPositionX=1;
 				enterpressed=false;
 				break;
+			case 'i':
+				Inventory* inventory;
+				break;
 			default: break;
 		}
 		switch(collision())
@@ -118,8 +121,10 @@ int Map::collision()
 		{
 		    BattleScene* battle = new BattleScene(2, KING_OF_DEAD);
 		    //MAKE THE ENENMY ENCOUNTERS DYNAMIC
-		    battle->battleSelect();
+		    //battle->battleSelect();
+		    
 		    battle->battleMove();
+			
 		    tile.noMoreEnemyTile(mapIndex[playerPositionY][playerPositionX]);
 		    delete battle;
 		    return true;
