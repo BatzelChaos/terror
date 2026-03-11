@@ -1,5 +1,6 @@
 #include "terror.h"
 
+
 using namespace std;
 
 WINDOW *create_newwin(int height, int width, int starty, int startx)
@@ -18,24 +19,6 @@ void wmvprintw(WINDOW *screen, int y, int x, const char *text)
 {
 	wmove(screen, y, x);
 	wprintw(screen, "%s", text);
-}
-
-void menuFunc_secondaryFunc(int menu, int menuX, int& menuType, bool enterpressed, int textPositionY, int textPositionX, WINDOW* tempScreen, int returnVar, const char* textVar)
-{
-	wmvprintw(tempScreen, textPositionY, textPositionX, textVar);
-	if(menu==(textPositionY)&&menuX==(textPositionX))
-	{
-		wmove(tempScreen, textPositionY, textPositionX);
-		wattron(tempScreen, A_STANDOUT);
-		wprintw(tempScreen, "%s", textVar);
-		wattroff(tempScreen, A_STANDOUT);
-		if (enterpressed==true) 
-		{
-
-			menuType=returnVar;
-			return;
-		}	
-	}
 }
 
 WINDOW* menuFunc_drawWindow(int windowType, int& menuLimitY, int& menuLimitX)
@@ -58,10 +41,6 @@ WINDOW* menuFunc_drawWindow(int windowType, int& menuLimitY, int& menuLimitX)
 			menuLimitY=1; menuLimitX=1;
 			break;
 		case INVENTORY:
-			textBoxPosY = 30 ; textBoxPosX = 110;
-			textBoxSizeY = 12; textBoxSizeX = 20;
-			
-			menuLimitY=10; menuLimitX=1;
 			break;    
 		case CREDITS:
 			textBoxPosY = 15; textBoxPosX = 45;
@@ -89,11 +68,10 @@ WINDOW* menuFunc_drawWindow(int windowType, int& menuLimitY, int& menuLimitX)
 
 void menuFunc(int menu, int menuX, int& menuType, bool enterpressed, int textPositionY, int textPositionX, WINDOW* tempScreen, int returnVar, const char* textVar)
 {
-	
 	switch(menuType)
 	{
 		case CHARACTER_SELECT:
-			if(menu==(textPositionY*20+1)&&menuX==(textPositionX*35+1))
+			if(menu*20==(textPositionY*20)&&menuX*35==(textPositionX*35))
 			{
 				wmove(tempScreen, textPositionY, textPositionX);
 				wattron(tempScreen, A_STANDOUT);
@@ -106,9 +84,10 @@ void menuFunc(int menu, int menuX, int& menuType, bool enterpressed, int textPos
 					return;
 				}	
 			}
-		break;
+			else wmvprintw(tempScreen, textPositionY, textPositionX, textVar);
+			break;
 		case BATTLE_SELECT:
-			if(menu==(textPositionY-1)&&menuX==(textPositionX/10))
+			if(menu*1==(textPositionY*1)&&menuX*10==(textPositionX*10))
 			{
 				wmove(tempScreen, textPositionY, textPositionX);
 				wattron(tempScreen, A_STANDOUT);
@@ -119,14 +98,28 @@ void menuFunc(int menu, int menuX, int& menuType, bool enterpressed, int textPos
 		
 					menuType=returnVar;
 					return;
-				}	
+				}
 			}
+			else wmvprintw(tempScreen, textPositionY, textPositionX, textVar);
 			break;
 		case BATTLE:
 			//if(menu==)
 			break;
 		default: 
-			menuFunc_secondaryFunc(menu, menuX, menuType, enterpressed, textPositionY, textPositionX, tempScreen, returnVar, textVar);
+			if(menu==(textPositionY)&&menuX==(textPositionX))
+			{
+				wmove(tempScreen, textPositionY, textPositionX);
+				wattron(tempScreen, A_STANDOUT);
+				wprintw(tempScreen, "%s", textVar);
+				wattroff(tempScreen, A_STANDOUT);
+				if (enterpressed==true) 
+				{
+		
+					menuType=returnVar;
+					return;
+				}	
+			}
+			else wmvprintw(tempScreen, textPositionY, textPositionX, textVar);
 			break;
 	}
 	wrefresh(tempScreen);
@@ -145,15 +138,6 @@ int main()
 				 //1 is visible
 				 //2 is very visible
 	menumenu GAME(45,150);
-	
-	BattleScene* battle;
-	Inventory* inventory;
-	
-	battle->battleMove();
-	inventory->inventoryMove();
-	
-	delete battle;
-	delete inventory;
 	
 	int gamestate=GAME.menuInitialise();
 	while(inloop==true)

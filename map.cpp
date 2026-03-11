@@ -54,9 +54,9 @@ int Map::mapMove(int mapID, int location[][16], int j, int i)
 				playerPositionX=1;
 				enterpressed=false;
 				break;
-			case 'i':
-				Inventory* inventory;
-				break;
+			//case 'i':
+			//	Inventory* inventory;
+			//	break;
 			default: break;
 		}
 		switch(collision())

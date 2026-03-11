@@ -159,7 +159,6 @@ int menumenu::characterSelect()
 "\n  █     █▒█     ▓██▓ ▓██ ░  █ █  ██"
 "\n          ██ ▓ ██████    █  █    ██"
 "\n                            █    ██");
-	borderControl(menuScreen);
 	menuFunc(menu, menuX, menuType, enterpressed, 21, 1, menuScreen, CARTAL, "Cartal, the Cursed");
 	menuFunc(menu, menuX, menuType, enterpressed, 1, 36, menuScreen, KANIEL, "Kaniel, the Fallen Angel");
 	menuFunc(menu, menuX, menuType, enterpressed, 21, 36, menuScreen, ALBERT, "Albert, the Bloody Knight");
@@ -167,9 +166,7 @@ int menumenu::characterSelect()
 	menuFunc(menu, menuX, menuType, enterpressed, 21, 71, menuScreen, PH2, "Albert, the Bloody Knight");
 	menuFunc(menu, menuX, menuType, enterpressed, 1, 106, menuScreen, PH3, "Albert, the Bloody Knight");
 	menuFunc(menu, menuX, menuType, enterpressed, 21, 106, menuScreen, PH4, "Albert, the Bloody Knight");
-	
-	wrefresh(menuScreen);
-	//wgetch(menuScreen);
+	borderControl(menuScreen);
 	return menuType;
 }
 
@@ -183,6 +180,7 @@ int menumenu::mainMenuMove()
 	while(inloop==true)
 	{
 		menuScreen = menuFunc_drawWindow(MAIN_MENU, menuLimitY, menuLimitX);
+		
 		
 		if(gameBootedUpFirstTime==true) 
 		{
@@ -281,101 +279,61 @@ int menumenu::mainMenuMove()
 	return 0;
 }
 
-/*
-int menumenu::menuMove(int menuYincrease, int menuXincrease)
-{
-	int keypressed;
-	bool inloop=true;
-	menu=0;
-	menuX=0;
-	while(inloop==true)
-	{
-		keypressed=getch();
-		//refreshMainScreen();
-		//causes flickering
-		switch(keypressed)
-		{
-			case KEY_UP:
-				menu=menu-menuYincrease;
-				if(menu<=0) menu=0;
-				break;
-			case KEY_DOWN:
-				menu=menu+menuYincrease;
-				if(menu>=menuLimitY) menu=menuLimitY;
-				break;
-			case KEY_RIGHT:
-				menuX=menuX+menuXincrease;
-				if(menuX>=menuLimitX) menuX=menuLimitX;
-				break;
-			case KEY_LEFT:
-				menuX=menuX-menuXincrease;
-				if(menuX<=0) menuX=0;
-				break;
-			case 10: //KEY_ENTER
-				enterpressed=true;
-				menuType=func();
-				menu=0; 
-				enterpressed=false;
-				break;
-			default: break;
-		}
-		func();
-		//borderControl(mainscreen);
-		wrefresh(mainscreen);
-	}
-	return 0;
-}
-*/
 int menumenu::characterSelectMove()
 {
+	menuScreen = menuFunc_drawWindow(CHARACTER_SELECT, menuLimitY, menuLimitX);
 	int keypressed;
 	bool inloop=true;
-	menu=0;
-	menuX=0;
+	menu=1;
+	menuX=1;
 	while(inloop==true)
 	{
-		menuScreen = menuFunc_drawWindow(CHARACTER_SELECT, menuLimitY, menuLimitX);
+
 		//refreshMainScreen();
 		//causes flickering
 		switch(keypressed)
 		{
 			case KEY_UP:
-				menu=menu-20;
-				if(menu<=0) menu=0;
+				menu--;
+				if(menu<=1) menu=1;
 				break;
 			case KEY_DOWN:
-				menu=menu+20;
+				menu++;
 				if(menu>=menuLimitY) menu=menuLimitY;
 				break;
 			case KEY_RIGHT:
-				menuX=menuX+35;
+				menuX++;
 				if(menuX>=menuLimitX) menuX=menuLimitX;
 				break;
 			case KEY_LEFT:
-				menuX=menuX-35;
-				if(menuX<=0) menuX=0;
+				menuX--;
+				if(menuX<=1) menuX=1;
 				break;
 			case 10: //KEY_ENTER
 				enterpressed=true;
-				switch(menuType)
-				{
-					case CHARACTER_SELECT:
-						menuType=characterSelect();
-						break;
-					case BIENE:
-						//playerCharacter=BIENE;
-						playBiene();
-						break;
-				}
-				menu=0; 
-				enterpressed=false;
 				break;
 			default: break;
 		}
-		characterSelect();
+		if (enterpressed==true)
+		{
+			switch(menuType)
+			{
+				case CHARACTER_SELECT:
+					menuType=characterSelect();
+					break;
+				case BIENE:
+					playBiene();
+					break;
+			}
+			menu=0; 
+			enterpressed=false;
+		}
+		else
+		{
+		characterSelect();	
+		}
 		keypressed=getch();
 		wrefresh(mainscreen);
-		
 	}
 	return 0;
 }
@@ -492,7 +450,6 @@ int menumenu::play()
 	menuType=CHARACTER_SELECT;
 	characterSelect();
 	characterSelectMove();
-	
 
 	WINDOW *tempScreen;
 	tempScreen=create_newwin(6, 50, bufferY, bufferX);
@@ -517,4 +474,5 @@ void menumenu::mapIndexingInit()
 	location[0][0]=INN_EMPIRE;
 	location[0][1]=INN_EMPIRE_ROOMA;
 	location[0][2]=INN_EMPIRE_ROOMB;
+	location[0][3]=INN_EMPIRE_ROOMC;
 }

@@ -56,7 +56,7 @@ int BattleScene::battleMove()
 		{
 			case KEY_UP:
 				menu--;
-				if(menu<=0) menu=0;
+				if(menu<=1) menu=1;
 				break;
 			case KEY_DOWN:
 				menu++;
@@ -68,7 +68,7 @@ int BattleScene::battleMove()
 				break;
 			case KEY_LEFT:
 				menuX--;
-				if(menuX<=0) menuX=0;
+				if(menuX<=1) menuX=1;
 				break;
 			case 10: //KEY_ENTER
 				enterpressed=true;

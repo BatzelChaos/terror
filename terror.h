@@ -30,6 +30,7 @@ enum Locations
 	INN_EMPIRE,
 	INN_EMPIRE_ROOMA,
 	INN_EMPIRE_ROOMB,
+	INN_EMPIRE_ROOMC,
 	STORE_EMPIRE,
 	DUNGEON_NEARBY_EMPIRE_A,
 	DUNGEON_NEARBY_EMPIRE_B
@@ -99,11 +100,10 @@ enum Menu
 #include <functional>
 #include "rapidxml.hpp"
 
-
+#include "inventory.h"
 #include "menumenu.h"
 #include "npc.h"
 #include "player.h"
-#include "inventory.h"
 #include "battlescene.h"
 #include "tile.h"
 #include "map.h"
@@ -119,8 +119,6 @@ using namespace std;
 void wmvprintw(WINDOW *screen, int y, int x, const char *text);
 
 WINDOW *create_newwin(int height, int width, int starty, int startx);
-
-void menuFunc_secondaryFunc(int menu, int menuX, int& menuType, bool enterpressed, int textPositionY, int textPositionX, WINDOW* tempScreen, int returnVar, const char* textVar);
 
 WINDOW *menuFunc_drawWindow(int windowType, int& menuLimitY, int& menuLimitX);
 

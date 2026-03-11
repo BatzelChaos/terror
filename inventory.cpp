@@ -1,15 +1,16 @@
 #include "terror.h"
 
 Inventory::Inventory()
-(
+{
 	inventoryScreen = menuFunc_drawWindow(INVENTORY, menuLimitY, menuLimitX);
-)
+}
 
 int Inventory::inventoryMove()
 {
 	char keypressed;
 	bool inloop=true;
 	bool enterpressed;
+	int menuType;
 	menu=1;
 	
 	while(inloop==true)
