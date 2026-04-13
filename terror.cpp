@@ -71,7 +71,7 @@ void menuFunc(int menu, int menuX, int& menuType, bool enterpressed, int textPos
 	switch(menuType)
 	{
 		case CHARACTER_SELECT:
-			if(menu*20==(textPositionY*20)&&menuX*35==(textPositionX*35))
+			if(menu*20==(textPositionY-1)&&menuX*35==(textPositionX-1))
 			{
 				wmove(tempScreen, textPositionY, textPositionX);
 				wattron(tempScreen, A_STANDOUT);
@@ -87,7 +87,7 @@ void menuFunc(int menu, int menuX, int& menuType, bool enterpressed, int textPos
 			else wmvprintw(tempScreen, textPositionY, textPositionX, textVar);
 			break;
 		case BATTLE_SELECT:
-			if(menu*1==(textPositionY*1)&&menuX*10==(textPositionX*10))
+			if(menu*1==(textPositionY-1)&&menuX*10==(textPositionX-1))
 			{
 				wmove(tempScreen, textPositionY, textPositionX);
 				wattron(tempScreen, A_STANDOUT);

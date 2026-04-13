@@ -56,7 +56,7 @@ int BattleScene::battleMove()
 		{
 			case KEY_UP:
 				menu--;
-				if(menu<=1) menu=1;
+				if(menu<=0) menu=0;
 				break;
 			case KEY_DOWN:
 				menu++;
@@ -68,7 +68,7 @@ int BattleScene::battleMove()
 				break;
 			case KEY_LEFT:
 				menuX--;
-				if(menuX<=1) menuX=1;
+				if(menuX<=0) menuX=0;
 				break;
 			case 10: //KEY_ENTER
 				enterpressed=true;
@@ -80,6 +80,8 @@ int BattleScene::battleMove()
 					case BATTLE_SELECT:
 						menuType=battleSelect();
 						break;
+					case BATTLE_RUN:
+						menuType=run();
 				}
 				menu=0; 
 				enterpressed=false;
@@ -94,6 +96,10 @@ int BattleScene::battleMove()
 			case BATTLE_ATTACK:
 				attack();
 				break;
+			case BATTLE_RUN:
+				run();
+			case BATTLE_END:
+				return 0;
 		}
 		wrefresh(battleMenu);
 		keypressed=getch();
@@ -106,8 +112,8 @@ int BattleScene::battleMove()
 int BattleScene::battleSelect()
 {
 	menuFunc(menu, menuX, menuType, enterpressed, 1,1,battleMenu, BATTLE_ATTACK, "Attack");
-	menuFunc(menu, menuX, menuType, enterpressed, 1,10,battleMenu, INVENTORY, "Inventory");
-	menuFunc(menu, menuX, menuType, enterpressed, 2,1,battleMenu, INVENTORY, "Run");
+	menuFunc(menu, menuX, menuType, enterpressed, 1,11,battleMenu, INVENTORY, "Inventory");
+	menuFunc(menu, menuX, menuType, enterpressed, 2,1,battleMenu, BATTLE_RUN, "Run");
 	wrefresh(battleMenu);
 	return menuType;
 }
@@ -145,6 +151,14 @@ void BattleScene::hpbar()
 void BattleScene::battle()
 {
 	
+}
+
+int BattleScene::run()
+{
+	if (player.spd>enemy[0].spd)
+	{
+		return BATTLE_END;
+	}
 }
 
 int BattleScene::battleEND()

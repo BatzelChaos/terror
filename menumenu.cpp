@@ -185,6 +185,8 @@ int menumenu::mainMenuMove()
 		if(gameBootedUpFirstTime==true) 
 		{
 			gameBootedUpFirstTime=false;
+			wrefresh(mainscreen);
+			borderControl(menuScreen);
 			mainMenu();
 		}
 		//refreshMainScreen();
@@ -243,6 +245,8 @@ int menumenu::mainMenuMove()
 				}
 				menu=0; 
 				enterpressed=false;
+				werase(menuScreen);
+				borderControl(menuScreen);
 				break;
 			default: break;
 		}
@@ -271,7 +275,6 @@ int menumenu::mainMenuMove()
 			case NEW_GAME:
 				return NEW_GAME;
 		}
-		//borderControl(mainscreen);
 		wrefresh(mainscreen);
 		keypressed=getch();
 		
@@ -284,8 +287,8 @@ int menumenu::characterSelectMove()
 	menuScreen = menuFunc_drawWindow(CHARACTER_SELECT, menuLimitY, menuLimitX);
 	int keypressed;
 	bool inloop=true;
-	menu=1;
-	menuX=1;
+	menu=0;
+	menuX=0;
 	while(inloop==true)
 	{
 
@@ -295,7 +298,7 @@ int menumenu::characterSelectMove()
 		{
 			case KEY_UP:
 				menu--;
-				if(menu<=1) menu=1;
+				if(menu<=0) menu=0;
 				break;
 			case KEY_DOWN:
 				menu++;
@@ -307,14 +310,20 @@ int menumenu::characterSelectMove()
 				break;
 			case KEY_LEFT:
 				menuX--;
-				if(menuX<=1) menuX=1;
+				if(menuX<=0) menuX=0;
 				break;
 			case 10: //KEY_ENTER
 				enterpressed=true;
 				break;
 			default: break;
 		}
-		if (enterpressed==true)
+		
+		if (enterpressed==false)
+		{
+		characterSelect();	
+		}
+	
+		else
 		{
 			switch(menuType)
 			{
@@ -327,13 +336,12 @@ int menumenu::characterSelectMove()
 			}
 			menu=0; 
 			enterpressed=false;
-		}
-		else
-		{
-		characterSelect();	
+			werase(menuScreen);
+			borderControl(menuScreen);
 		}
 		keypressed=getch();
 		wrefresh(mainscreen);
+	
 	}
 	return 0;
 }
