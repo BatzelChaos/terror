@@ -1,6 +1,6 @@
 #include "terror.h"
 
-BattleScene::BattleScene(int enemyC, int special)
+BattleScene::BattleScene(Player& player, int enemyC, int special):player(player)
 {
 
 	/*
@@ -15,8 +15,8 @@ BattleScene::BattleScene(int enemyC, int special)
 	battleMenu=menuFunc_drawWindow(BATTLE_SELECT, menuLimitYmenu, menuLimitXmenu);
 	
 	
-	enemyCount=enemyC;
-	enemy= new npc[enemyCount];
+	this->enemyCount=enemyC;
+	this->enemy= new npc[enemyCount];
 	
 
 	switch(special)
@@ -33,7 +33,7 @@ BattleScene::BattleScene(int enemyC, int special)
 			{
 				enemy[i].npcInit(SKELETON_LOW);
 			}
-			enemy[1].npcInit(KING_OF_DEAD);
+			enemy[0].npcInit(KING_OF_DEAD);
 			battleEnemyRender(KING_OF_DEAD, 3);
 			break;
 	}
@@ -131,7 +131,7 @@ void BattleScene::hpbar()
 	
 	for(int i = 0;i<enemyCount;i++)
 	{
-		string a = to_string(enemy[i].hp);
+		string a = to_string(enemy[i].getHP());
 		
 		const char* hp = a.c_str();
 		wmvprintw(battleScreen, buffer1+i, 4, hp);
@@ -155,7 +155,7 @@ void BattleScene::battle()
 
 int BattleScene::run()
 {
-	if (player.spd>enemy[0].spd)
+	if (player.getSpeed()>enemy[0].getSpeed())
 	{
 		return BATTLE_END;
 	}
@@ -173,13 +173,13 @@ void BattleScene::battleEnemyRender(int ID, int position)
 	{
 		case KING_OF_DEAD:
 			wmvprintw(battleScreen, 2, position, "    O    ");
-			wmvprintw(battleScreen, 2, position, "    O    ");
-			wmvprintw(battleScreen, 2, position, "    O    ");
-			wmvprintw(battleScreen, 2, position, "    O    ");
-			wmvprintw(battleScreen, 2, position, "    O    ");
-			wmvprintw(battleScreen, 2, position, "    O    ");
-			wmvprintw(battleScreen, 2, position, "    O    ");
-			wmvprintw(battleScreen, 2, position, "    O    ");
+			wmvprintw(battleScreen, 3, position, "    O    ");
+			wmvprintw(battleScreen, 4, position, "    O    ");
+			wmvprintw(battleScreen, 5, position, "    O    ");
+			wmvprintw(battleScreen, 6, position, "    O    ");
+			wmvprintw(battleScreen, 7, position, "    O    ");
+			wmvprintw(battleScreen, 8, position, "    O    ");
+			wmvprintw(battleScreen, 9, position, "    O    ");
 	}
 }
 

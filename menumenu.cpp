@@ -17,6 +17,7 @@ menumenu::menumenu(int height, int width)
 	mainscreen=create_newwin(screenHeight,screenWidth,starty,startx);
 	wmove(mainscreen,1,1);
 	wtitle(mainscreen);
+	wmvprintw(mainscreen, 1, 1, "v0.0.10");
 	
 	/*inData.open("terror.settings");
 	string data;

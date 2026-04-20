@@ -1,7 +1,7 @@
 #pragma once
 #include "terror.h"
 
-class Player:public npc, public menumenu
+class Player:public npc
 {
 	public:
 	
@@ -10,8 +10,8 @@ class Player:public npc, public menumenu
 	int lvl, xp, xpRequired, lvlUP;
 	int playerPositionX, playerPositionY;
 	
+	Player();
+	
 	void increaseLVL();
 	void death();
-	
-	
 };

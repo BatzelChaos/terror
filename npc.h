@@ -13,5 +13,6 @@ class npc
 	
 	npc();
 	void npcInit(int npcID);
-	int hpGet();
+	int getHP(){return hp;};
+	int getSpeed(){return spd;};
 };

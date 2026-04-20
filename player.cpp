@@ -1,6 +1,14 @@
 #include "terror.h"
 
-
+Player::Player()
+{
+	lvl=0; xp=0;
+	
+	hp=10;
+	atk=5;
+	def=0;
+	spd=11;
+}
 
 void Player::increaseLVL()
 {

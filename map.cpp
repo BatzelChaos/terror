@@ -119,9 +119,7 @@ int Map::collision()
 		case TRANSITION_TILE_SOUTH: return SOUTH;
 		case ENEMY_TILE:
 		{
-		    BattleScene* battle = new BattleScene(2, KING_OF_DEAD);
-		    //MAKE THE ENENMY ENCOUNTERS DYNAMIC
-		    //battle->battleSelect();
+		    BattleScene* battle = new BattleScene(player, 2, KING_OF_DEAD);
 		    
 		    battle->battleMove();
 			

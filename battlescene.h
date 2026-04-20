@@ -3,20 +3,22 @@
 #include "menumenu.h"
 #include "player.h"
 
-class BattleScene:public npc, public menumenu
+class BattleScene: public menumenu
 {
 	public:
 	
 	WINDOW *battleScreen;
 	WINDOW *battleMenu;
 	npc* enemy;
+	Player player;
+	
 	int enemyCount;
 	int currentScreenName;
 	int menuLimitXbattle, menuLimitYbattle;
 	int menuLimitXmenu, menuLimitYmenu;
 	//Player&player;
 	
-	BattleScene(int enemyC, int special);
+	BattleScene(Player& player,int enemyC, int special);
 	void hpbar();
 	void battle();
 	void battleEnemyRender(int ID, int position);
@@ -30,7 +32,6 @@ class BattleScene:public npc, public menumenu
 	int status();
 	int run();
 	int battleEND();
-	Player player;
 	
 	~BattleScene();
 };

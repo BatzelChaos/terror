@@ -17,7 +17,7 @@ void npc::npcInit(int npcID)
 			break;
 		case KING_OF_DEAD:
 			npcname="King Of Dead";
-			hp=5; atk=1; def=1; spd=1; xpEnemy=100;
+			hp=120; atk=18; def=5; spd=10; xpEnemy=100;
 			break;
 		case SKELETON_LOW:
 			npcname="Skeleton";
@@ -30,7 +30,3 @@ void npc::npcInit(int npcID)
 	}
 }
 
-int npc::hpGet()
-{
-	return hp;
-}

@@ -5,6 +5,7 @@ class Map:public Player
 {
 	public:
 	WINDOW* mapScreen;
+	Player player;
 	int mapID;
 	Tile tile;
 	int mapIndex[16][16];
