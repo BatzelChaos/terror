@@ -141,7 +141,6 @@ int menumenu::characterSelect()
 	menuFunc_drawWindow(CHARACTER_SELECT, menuLimitY, menuLimitX);
 	menuFunc(menu, menuX, menuType, enterpressed, 1, 1, menuScreen, BIENE, 
 	"Biene, the Exiled Princess"
-"\n ████████            ███████████  "
 "\n █████████▓     ▒   ████████████  "
 "\n ██████            ██████▒██████  "
 "\n ████              ████     █████ "
@@ -156,17 +155,14 @@ int menumenu::characterSelect()
 "\n ███ █           ██     ▓▒   █▓███"
 "\n █  █▒              ██▒▓       ███"
 "\n █   ░█           █     █   ▓ ████"
-"\n █ █            ░█    ████   ░   ██"
-"\n  █     █▒█     ▓██▓ ▓██ ░  █ █  ██"
-"\n          ██ ▓ ██████    █  █    ██"
-"\n                            █    ██");
-	menuFunc(menu, menuX, menuType, enterpressed, 21, 1, menuScreen, CARTAL, "Cartal, the Cursed");
+"\n █ █            ░█    ████   ░   ██");
+	menuFunc(menu, menuX, menuType, enterpressed, 17, 1, menuScreen, CARTAL, "Cartal, the Cursed");
 	menuFunc(menu, menuX, menuType, enterpressed, 1, 36, menuScreen, KANIEL, "Kaniel, the Fallen Angel");
-	menuFunc(menu, menuX, menuType, enterpressed, 21, 36, menuScreen, ALBERT, "Albert, the Bloody Knight");
+	menuFunc(menu, menuX, menuType, enterpressed, 17, 36, menuScreen, ALBERT, "Albert, the Bloody Knight");
 	menuFunc(menu, menuX, menuType, enterpressed, 1, 71, menuScreen, PH1, "Albert, the Bloody Knight");
-	menuFunc(menu, menuX, menuType, enterpressed, 21, 71, menuScreen, PH2, "Albert, the Bloody Knight");
+	menuFunc(menu, menuX, menuType, enterpressed, 17, 71, menuScreen, PH2, "Albert, the Bloody Knight");
 	menuFunc(menu, menuX, menuType, enterpressed, 1, 106, menuScreen, PH3, "Albert, the Bloody Knight");
-	menuFunc(menu, menuX, menuType, enterpressed, 21, 106, menuScreen, PH4, "Albert, the Bloody Knight");
+	menuFunc(menu, menuX, menuType, enterpressed, 17, 106, menuScreen, PH4, "Albert, the Bloody Knight");
 	borderControl(menuScreen);
 	return menuType;
 }

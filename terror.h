@@ -62,6 +62,7 @@ enum EnemyNames
 	KING_OF_DEAD
 };
 
+
 enum Menu
 {
 	BATTLE,
@@ -85,9 +86,11 @@ enum Menu
 	WINDOW_SIZE,
 	COLOR_SELECT,
 	CHARACTER_SELECT,
+
+	MAP_SCREEN,
 };
 
-
+#include <locale.h>
 #include <iostream>
 #include <fstream>
 #include <termios.h>

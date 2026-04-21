@@ -3,7 +3,7 @@
 Map::Map()
 {
 	
-	mapScreen=create_newwin(16, 32, 2, 118);
+	mapScreen=menuFunc_drawWindow(MAP_SCREEN, tempY, tempX);
 	Tile* tile;
 }
 

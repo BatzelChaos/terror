@@ -26,17 +26,22 @@ WINDOW* menuFunc_drawWindow(int windowType, int& menuLimitY, int& menuLimitX)
 {
 	int textBoxPosY, textBoxPosX, textBoxSizeY, textBoxSizeX;
 	WINDOW* menuScreen;
+
+	int starty=(LINES-35)/2;
+	int startx=(COLS-150)/2;
+
+	int battlex, battley;
 	
 	switch(windowType)
 	{
 		case MAIN_MENU:
-			textBoxPosY = 20; textBoxPosX = 70;
+			textBoxPosY = starty+18; textBoxPosX = startx+65;
 			textBoxSizeY = 8; textBoxSizeX = 20;
 			
 			menuLimitY=4; menuLimitX=1;
 			break;
 		case BATTLE_SELECT:
-			textBoxPosY = 34 ; textBoxPosX = 10;
+			textBoxPosY = battley+15 ; textBoxPosX = battlex+2;
 			textBoxSizeY = 8; textBoxSizeX = 103;
 			
 			menuLimitY=1; menuLimitX=1;
@@ -50,17 +55,24 @@ WINDOW* menuFunc_drawWindow(int windowType, int& menuLimitY, int& menuLimitX)
 			menuLimitY=0, menuLimitX=0;
 			break;
 		case CHARACTER_SELECT:
-			textBoxPosY = 1; textBoxPosX = 9;
-			textBoxSizeY = 42; textBoxSizeX = 140;
+			textBoxPosY = starty+1; textBoxPosX = startx+5;
+			textBoxSizeY = 33; textBoxSizeX = 140;
 			
-			menuLimitY=20; menuLimitX=105;
+			menuLimitY=2; menuLimitX=4;
 			break;
 			
 		case BATTLE:
-			textBoxPosY = 9; textBoxPosX = 8;
-			textBoxSizeY = 34; textBoxSizeX = 107;
+			textBoxPosY = starty+10; textBoxPosX = startx+2;
+			battley = textBoxPosY; battlex = textBoxPosX;
+			textBoxSizeY = 24; textBoxSizeX = 107;
 			
 			menuLimitY=0; menuLimitX=4;
+			break;
+		case MAP_SCREEN:
+			textBoxPosY = starty+1; textBoxPosX = startx+116;
+			textBoxSizeY = 16; textBoxSizeX = 32;
+
+			menuLimitY = 16; menuLimitX = 32;
 			break;
 	}
 	menuScreen=create_newwin(textBoxSizeY, textBoxSizeX, textBoxPosY, textBoxPosX);
@@ -72,7 +84,7 @@ void menuFunc(int menu, int menuX, int& menuType, bool enterpressed, int textPos
 	switch(menuType)
 	{
 		case CHARACTER_SELECT:
-			if(menu*20==(textPositionY-1)&&menuX*35==(textPositionX-1))
+			if(menu*16==(textPositionY-1)&&menuX*35==(textPositionX-1))
 			{
 				wmove(tempScreen, textPositionY, textPositionX);
 				wattron(tempScreen, A_STANDOUT);
@@ -130,6 +142,7 @@ int main()
 {
 	srand(time(0));
 	bool inloop=true;
+	setlocale(LC_ALL, "");
 	initscr();
 	refresh();
 	cbreak(); //OR raw();
@@ -138,7 +151,7 @@ int main()
 	curs_set(0); //0 is invisible
 				 //1 is visible
 				 //2 is very visible
-	menumenu GAME(45,150);
+	menumenu GAME(35,150);
 	
 	int gamestate=GAME.menuInitialise();
 	while(inloop==true)

@@ -99,6 +99,10 @@ int BattleScene::battleMove()
 			case BATTLE_RUN:
 				run();
 			case BATTLE_END:
+				wclear(battleMenu);
+				wrefresh(battleMenu);
+				wclear(battleScreen);
+				wrefresh(battleScreen);
 				return 0;
 		}
 		wrefresh(battleMenu);
@@ -159,6 +163,7 @@ int BattleScene::run()
 	{
 		return BATTLE_END;
 	}
+	return BATTLE_SELECT;
 }
 
 int BattleScene::battleEND()
@@ -169,6 +174,7 @@ int BattleScene::battleEND()
 
 void BattleScene::battleEnemyRender(int ID, int position)
 {
+	position=position*10;
 	switch(ID)
 	{
 		case KING_OF_DEAD:

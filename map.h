@@ -12,6 +12,9 @@ class Map:public Player
 	int RNG;
 	int tempY;
 	int tempX;
+
+	int menuLimitXmenu, menuLimitYmenu;
+
 	
 	Map();
 	
