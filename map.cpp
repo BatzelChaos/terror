@@ -7,7 +7,7 @@ Map::Map()
 	Tile* tile;
 }
 
-int Map::mapMove(int mapID, int location[][16], int j, int i)
+int Map::mapMove(int mapID, int j, int i)
 {
 	
 	int keypressed;
@@ -18,7 +18,6 @@ int Map::mapMove(int mapID, int location[][16], int j, int i)
 	tempY = playerPositionY;
 	tempX = playerPositionX;
 	wattron(mapScreen, A_STANDOUT);
-	mapDraw(mapID);
 	while(inloop==true)
 	{
 		playerErase();
@@ -32,13 +31,13 @@ int Map::mapMove(int mapID, int location[][16], int j, int i)
 				break;
 			case KEY_DOWN:
 				tempY++;
-				if(tempY>=14) tempY=14;
+				if(tempY>=30) tempY=30;
 				if(collision()==true) tempY--;
 				playerPositionY=tempY;
 				break;
 			case KEY_RIGHT:
 				tempX++;
-				if(tempX>=14) tempX=14;
+				if(tempX>=30) tempX=30;
 				if(collision()==true) tempX--;
 				playerPositionX=tempX;
 				break;
@@ -48,16 +47,15 @@ int Map::mapMove(int mapID, int location[][16], int j, int i)
 				if(collision()==true) tempX++;
 				playerPositionX=tempX;
 				break;
-			case 10: //KEY_ENTER
-				enterpressed=true;
-				playerPositionY=1;
-				playerPositionX=1;
-				enterpressed=false;
-				break;
-			//case 'i':
-			//	Inventory* inventory;
+			//case 10: //KEY_ENTER
+			//	enterpressed=true;
+			//	playerPositionY=1;
+			//	playerPositionX=1;
+			//	enterpressed=false;
 			//	break;
-			default: break;
+			case 'i':
+				inventory -> inventoryMove();
+				break;
 		}
 		switch(collision())
 		{
@@ -67,7 +65,11 @@ int Map::mapMove(int mapID, int location[][16], int j, int i)
 			case SOUTH: return location[j-1][i];
 			default: break;
 		}
+		borderControl(mapScreen);
+		mapDraw(mapID);
 		playerDraw();
+		
+
 		wrefresh(mapScreen);
 		keypressed=getch();
 		
@@ -79,7 +81,7 @@ int Map::mapMove(int mapID, int location[][16], int j, int i)
 void Map::mapDraw(int mapID)
 {
 	wmvprintw(mapScreen, playerPositionY, playerPositionX*2, "  "); 
-	tile.tileMap(mapID, mapIndex, mapScreen);
+	tile.tileMap(mapID, mapScreen);
 }
 
 void Map::currentMap()
@@ -109,7 +111,7 @@ int Map::collision()
     }
 */
 	
-	switch (tile.tileCollision(tempY, tempX, mapIndex))
+	switch (tile.tileCollision(tempY, tempX))
 	{
 		case EMPTY_TILE: return false; 
 		case WALL_TILE: return true;
@@ -121,12 +123,33 @@ int Map::collision()
 		{
 		    BattleScene* battle = new BattleScene(player, 2, KING_OF_DEAD);
 		    
-		    battle->battleMove();
-			
-		    tile.noMoreEnemyTile(mapIndex[playerPositionY][playerPositionX]);
-		    delete battle;
-		    return true;
+		    int value = battle->battleMove();
+			if (value == BATTLE_END)
+			{
+				tile.deleteCell(mapIndex[playerPositionY][playerPositionX]);
+				delete battle;
+				return false;
+			}
+			else return true;
+		    
 		}
+		case TREASURE_TILE:
+			for(int i=0;i<=32;i++)
+			{
+				for(int j=0;j<=32;j++)
+				{
+					switch(location[i][j])
+					{
+						case INN_EMPIRE:
+							int value = inventory -> addItem(BROKEN_KNIFE);
+							if (value==1)
+							{
+								tile.deleteCell(mapIndex[playerPositionY][playerPositionX]);
+							} 
+						break;
+					}
+				}
+			}
 	}
 	return false;
 }

@@ -15,7 +15,11 @@
 #define PH3 406
 #define PH4 407
 
-//ITEMS
+enum Items
+{
+	BROKEN_KNIFE,
+};
+
 #define COAT_BIENE 500
 #define APPLE 501
 #define HAMMER_SPEAR_BIENE 502
@@ -90,6 +94,11 @@ enum Menu
 	MAP_SCREEN,
 };
 
+
+inline int location[32][32];
+inline int mapIndex[32][32];
+
+
 #include <locale.h>
 #include <iostream>
 #include <fstream>
@@ -127,6 +136,7 @@ WINDOW *menuFunc_drawWindow(int windowType, int& menuLimitY, int& menuLimitX);
 
 void menuFunc(int menu, int menuX, int& menuType, bool enterpressed, int textPositionY, int textPositionX, WINDOW* tempScreen, int returnVar, const char* textVar);
 
+void borderControl(WINDOW *screen);
 //int random(int r)
 //{
 //	rand(r);

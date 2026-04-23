@@ -17,7 +17,7 @@ menumenu::menumenu(int height, int width)
 	mainscreen=create_newwin(screenHeight,screenWidth,starty,startx);
 	wmove(mainscreen,1,1);
 	wtitle(mainscreen);
-	wmvprintw(mainscreen, 1, 1, "v0.0.10");
+	wmvprintw(mainscreen, 1, 1, "v0.0.11");
 	
 	/*inData.open("terror.settings");
 	string data;
@@ -56,13 +56,6 @@ void menumenu::cleanUp(WINDOW *screen, int Y, int X)
 	borderControl(screen); //BANDAID SOLUTION TO THE ABOVE PROBLEM
 	wrefresh(screen); //for now useless, but i'll remove borderControl from here
 }
-
-void menumenu::borderControl(WINDOW *screen)
-{
-	wborder(screen,'|','|','-','-','o','o','o','o');
-	wrefresh(screen);
-}
-
 
 
 void menumenu::refreshMainScreen()
@@ -375,11 +368,11 @@ void menumenu::playBiene()
 		{
 			case INN_EMPIRE:
 				wmvprintw(mainscreen, chatAdder, 1, "...");chatAdder++;
-				location[y][x] = map.mapMove(INN_EMPIRE, location, y, x);
+				location[y][x] = map.mapMove(INN_EMPIRE, y, x);
 				break;
 			case INN_EMPIRE_ROOMA:
 				wmvprintw(mainscreen, chatAdder, 1, "...");chatAdder++;
-				location[y][x] = map.mapMove(INN_EMPIRE_ROOMA, location, y, x);
+				location[y][x] = map.mapMove(INN_EMPIRE_ROOMA, y, x);
 				break;
 			
 				
@@ -394,6 +387,7 @@ int menumenu::menuInitialise()
 	//werase(mainscreen);
 	skullart1();
 	wtitle(mainscreen);
+	borderControl(mainscreen);
 	
 	enterpressed=false;
 	menu=0; menuX=0;

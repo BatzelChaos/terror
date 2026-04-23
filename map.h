@@ -8,17 +8,19 @@ class Map:public Player
 	Player player;
 	int mapID;
 	Tile tile;
-	int mapIndex[16][16];
 	int RNG;
 	int tempY;
 	int tempX;
 
 	int menuLimitXmenu, menuLimitYmenu;
 
+	Inventory* inventory = new Inventory;
+
+
 	
 	Map();
 	
-	int mapMove(int mapID, int location[][16], int j, int i);
+	int mapMove(int mapID, int j, int i);
 	void mapDraw(int mapID);
 	int collision();
 	void currentMap();

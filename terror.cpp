@@ -1,7 +1,4 @@
 #include "terror.h"
-
-//VERSION 0.0.10
-
 using namespace std;
 
 WINDOW *create_newwin(int height, int width, int starty, int startx)
@@ -22,6 +19,13 @@ void wmvprintw(WINDOW *screen, int y, int x, const char *text)
 	wprintw(screen, "%s", text);
 }
 
+void borderControl(WINDOW *screen)
+{
+	wborder(screen,'|','|','-','-','o','o','o','o');
+	wrefresh(screen);
+}
+
+
 WINDOW* menuFunc_drawWindow(int windowType, int& menuLimitY, int& menuLimitX)
 {
 	int textBoxPosY, textBoxPosX, textBoxSizeY, textBoxSizeX;
@@ -40,14 +44,16 @@ WINDOW* menuFunc_drawWindow(int windowType, int& menuLimitY, int& menuLimitX)
 			
 			menuLimitY=4; menuLimitX=1;
 			break;
-		case BATTLE_SELECT:
-			textBoxPosY = battley+15 ; textBoxPosX = battlex+2;
-			textBoxSizeY = 8; textBoxSizeX = 103;
+		
 			
-			menuLimitY=1; menuLimitX=1;
-			break;
+
 		case INVENTORY:
-			break;    
+			textBoxPosY = starty+1; textBoxPosX = startx+108;
+			textBoxSizeY = 8; textBoxSizeX = 40;
+			
+			menuLimitY=30, menuLimitX=0;
+			break;
+
 		case CREDITS:
 			textBoxPosY = 15; textBoxPosX = 45;
 			textBoxSizeY = 8; textBoxSizeX = 40;
@@ -58,21 +64,29 @@ WINDOW* menuFunc_drawWindow(int windowType, int& menuLimitY, int& menuLimitX)
 			textBoxPosY = starty+1; textBoxPosX = startx+5;
 			textBoxSizeY = 33; textBoxSizeX = 140;
 			
-			menuLimitY=2; menuLimitX=4;
+			menuLimitY=1; menuLimitX=3;
 			break;
 			
 		case BATTLE:
-			textBoxPosY = starty+10; textBoxPosX = startx+2;
+			textBoxPosY = starty+1; textBoxPosX = startx+20;
 			battley = textBoxPosY; battlex = textBoxPosX;
-			textBoxSizeY = 24; textBoxSizeX = 107;
+			textBoxSizeY = 33; textBoxSizeX = 107;
 			
-			menuLimitY=0; menuLimitX=4;
+			menuLimitY=0; menuLimitX=2;
 			break;
-		case MAP_SCREEN:
-			textBoxPosY = starty+1; textBoxPosX = startx+116;
-			textBoxSizeY = 16; textBoxSizeX = 32;
+			
+		case BATTLE_SELECT:
+			textBoxPosY = battley+24 ; textBoxPosX = battlex+2;
+			textBoxSizeY = 8; textBoxSizeX = 103;
+			
+			menuLimitY=1; menuLimitX=1;
+			break;
 
-			menuLimitY = 16; menuLimitX = 32;
+		case MAP_SCREEN:
+			textBoxPosY = starty+1; textBoxPosX = startx+44;
+			textBoxSizeY = 32; textBoxSizeX = 64;
+
+			menuLimitY = 32; menuLimitX = 64;
 			break;
 	}
 	menuScreen=create_newwin(textBoxSizeY, textBoxSizeX, textBoxPosY, textBoxPosX);

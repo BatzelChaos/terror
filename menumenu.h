@@ -14,7 +14,6 @@ class menumenu
 		
 		//SETTINGS
 		bool gameBootedUpFirstTime=true;
-		int location[16][16];
 		int chatAdder;
 
 		int textSpeed=300;	//change this to be stored in a file and loaded in once the program starts
@@ -44,7 +43,6 @@ class menumenu
 		
 		
 		void refreshMainScreen();
-		void borderControl(WINDOW *screen);
 		int titlePlacement(int widthTitle);
 		
 		void wtitle(WINDOW *screen);

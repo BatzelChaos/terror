@@ -74,11 +74,11 @@ void Tile::tileDraw(int y, int x,TileType tileEnter, WINDOW* mapScreen)
 	}
 }
 
-void Tile::tileMap(int mapID, int mapIndex[][16], WINDOW* mapScreen)
+void Tile::tileMap(int mapID, WINDOW* mapScreen)
 {
-	for(int yscreen=1; yscreen<15; yscreen++)
+	for(int yscreen=1; yscreen<31; yscreen++)
 	{
-		for(int xscreen = 1; xscreen<15; xscreen++)
+		for(int xscreen = 1; xscreen<31; xscreen++)
 		{
 			int ytile=yscreen;
 			int xtile=xscreen*2;
@@ -97,10 +97,15 @@ void Tile::tileMap(int mapID, int mapIndex[][16], WINDOW* mapScreen)
 						tileDraw(ytile, xtile, ENEMY_TILE, mapScreen);
 						mapIndex[yscreen][xscreen]=ENEMY_TILE;
 					}
-					if(xtile==28&&ytile==7)
+					if(xtile==60&&ytile==7)
 					{
 						tileDraw(ytile, xtile, TRANSITION_TILE_EAST, mapScreen);
 						mapIndex[yscreen][xscreen]=TRANSITION_TILE_EAST;
+					}
+					if(xtile==54&&ytile==10)
+					{
+						tileDraw(ytile, xtile, TREASURE_TILE, mapScreen);
+						mapIndex[yscreen][xscreen]=TREASURE_TILE;
 					}
 					break;
 			}
@@ -108,7 +113,7 @@ void Tile::tileMap(int mapID, int mapIndex[][16], WINDOW* mapScreen)
 	}
 }
 
-int Tile::tileCollision(int playerPosY, int playerPosX, int mapIndex[][16])
+int Tile::tileCollision(int playerPosY, int playerPosX)
 {
 	
 	switch (mapIndex[playerPosY][playerPosX])
@@ -126,6 +131,11 @@ int Tile::tileCollision(int playerPosY, int playerPosX, int mapIndex[][16])
 }
 
 void Tile::noMoreEnemyTile(int mapIndex)
+{
+	mapIndex=EMPTY_TILE;
+}
+
+void Tile::deleteCell(int mapIndex)
 {
 	mapIndex=EMPTY_TILE;
 }

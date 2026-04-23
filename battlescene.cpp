@@ -161,7 +161,7 @@ int BattleScene::run()
 {
 	if (player.getSpeed()>enemy[0].getSpeed())
 	{
-		return BATTLE_END;
+		return BATTLE_RUN;
 	}
 	return BATTLE_SELECT;
 }
