@@ -49,7 +49,7 @@ WINDOW* menuFunc_drawWindow(int windowType, int& menuLimitY, int& menuLimitX)
 
 		case INVENTORY:
 			textBoxPosY = starty+1; textBoxPosX = startx+108;
-			textBoxSizeY = 8; textBoxSizeX = 40;
+			textBoxSizeY = 33; textBoxSizeX = 40;
 			
 			menuLimitY=30, menuLimitX=0;
 			break;
@@ -155,9 +155,13 @@ void menuFunc(int menu, int menuX, int& menuType, bool enterpressed, int textPos
 int main()
 {
 	srand(time(0));
+	
 	bool inloop=true;
+
 	setlocale(LC_ALL, "");
 	initscr();
+	set_escdelay(25);
+
 	refresh();
 	cbreak(); //OR raw();
 	keypad(stdscr, TRUE);
@@ -165,7 +169,7 @@ int main()
 	curs_set(0); //0 is invisible
 				 //1 is visible
 				 //2 is very visible
-	menumenu GAME(35,150);
+	menumenu GAME(40,150);
 	
 	int gamestate=GAME.menuInitialise();
 	while(inloop==true)

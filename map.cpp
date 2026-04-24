@@ -5,6 +5,7 @@ Map::Map()
 	
 	mapScreen=menuFunc_drawWindow(MAP_SCREEN, tempY, tempX);
 	Tile* tile;
+	mapDraw(mapID);
 }
 
 int Map::mapMove(int mapID, int j, int i)
@@ -26,25 +27,57 @@ int Map::mapMove(int mapID, int j, int i)
 			case KEY_UP:
 				tempY--;
 				if(tempY<=1) tempY=1;
-				if(collision()==true) tempY++;
+				switch(collision())
+				{
+					case true: tempY++; break;
+					case NORTH: return location[j+1][i];
+					case EAST: return location[j][i+1];
+					case WEST: return location[j][i-1];
+					case SOUTH: return location[j-1][i];
+					default: break;
+				}
 				playerPositionY=tempY;
 				break;
 			case KEY_DOWN:
 				tempY++;
 				if(tempY>=30) tempY=30;
-				if(collision()==true) tempY--;
+				switch(collision())
+				{
+					case true: tempY--; break;
+					case NORTH: return location[j+1][i];
+					case EAST: return location[j][i+1];
+					case WEST: return location[j][i-1];
+					case SOUTH: return location[j-1][i];
+					default: break;
+				}
 				playerPositionY=tempY;
 				break;
 			case KEY_RIGHT:
 				tempX++;
 				if(tempX>=30) tempX=30;
-				if(collision()==true) tempX--;
+				switch(collision())
+				{
+					case true: tempX--; break;
+					case NORTH: return location[j+1][i];
+					case EAST: return location[j][i+1];
+					case WEST: return location[j][i-1];
+					case SOUTH: return location[j-1][i];
+					default: break;
+				}
 				playerPositionX=tempX;
 				break;
 			case KEY_LEFT:
 				tempX--;
-				if(tempX<=0) tempX++;
-				if(collision()==true) tempX++;
+				if(tempX<=0) tempX=1;
+				switch(collision())
+				{
+					case true: tempX++; break;
+					case NORTH: return location[j+1][i];
+					case EAST: return location[j][i+1];
+					case WEST: return location[j][i-1];
+					case SOUTH: return location[j-1][i];
+					default: break;
+				}
 				playerPositionX=tempX;
 				break;
 			//case 10: //KEY_ENTER
@@ -54,19 +87,24 @@ int Map::mapMove(int mapID, int j, int i)
 			//	enterpressed=false;
 			//	break;
 			case 'i':
-				inventory -> inventoryMove();
+				int value = inventory -> inventoryMove();
+				switch(value)
+				{
+					case 0: break;
+				}
 				break;
+			case 27: //ESCAPE_KEY
+				break; //ADD PAUSE MENU
 		}
-		switch(collision())
+		/*switch(collision())
 		{
 			case NORTH: return location[j+1][i];
 			case EAST: return location[j][i+1];
 			case WEST: return location[j][i-1];
 			case SOUTH: return location[j-1][i];
 			default: break;
-		}
+		}*/
 		borderControl(mapScreen);
-		mapDraw(mapID);
 		playerDraw();
 		
 
@@ -101,6 +139,8 @@ void Map::playerErase()
 	wmvprintw(mapScreen, playerPositionY, playerPositionX*2, "  ");
 }
 
+int test = 1;
+
 int Map::collision()
 {
 	/*
@@ -134,22 +174,21 @@ int Map::collision()
 		    
 		}
 		case TREASURE_TILE:
-			for(int i=0;i<=32;i++)
+			switch(mapID)
 			{
-				for(int j=0;j<=32;j++)
-				{
-					switch(location[i][j])
+				case INN_EMPIRE:
+					int value = inventory -> addItem(BROKEN_KNIFE);
+					if (value==1)
 					{
-						case INN_EMPIRE:
-							int value = inventory -> addItem(BROKEN_KNIFE);
-							if (value==1)
-							{
-								tile.deleteCell(mapIndex[playerPositionY][playerPositionX]);
-							} 
-						break;
+						tile.deleteCell(mapIndex[tempY][tempX]);
+						return false; //returns true if the treasure is picked up
 					}
-				}
+					else 
+					{
+						return true;
+					}
 			}
+			return true; //treasure pickup failed
 	}
 	return false;
 }

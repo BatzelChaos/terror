@@ -17,7 +17,7 @@ menumenu::menumenu(int height, int width)
 	mainscreen=create_newwin(screenHeight,screenWidth,starty,startx);
 	wmove(mainscreen,1,1);
 	wtitle(mainscreen);
-	wmvprintw(mainscreen, 1, 1, "v0.0.11");
+	wmvprintw(mainscreen, 1, 1, "v0.0.12 PRE-ALPHA");
 	
 	/*inData.open("terror.settings");
 	string data;
@@ -281,9 +281,6 @@ int menumenu::characterSelectMove()
 	menuX=0;
 	while(inloop==true)
 	{
-
-		//refreshMainScreen();
-		//causes flickering
 		switch(keypressed)
 		{
 			case KEY_UP:
@@ -359,7 +356,7 @@ void menumenu::playBiene()
 	wmvprintw(mainscreen, chatAdder, 1, "..."); chatAdder++;
 	wmvprintw(mainscreen, chatAdder, 1, "Commands: look, take, go, speak."); chatAdder++;
 	
-	Map map;
+	Map* map = new Map;
 	
 	while (bieneLoop==true)
 	{
@@ -368,11 +365,11 @@ void menumenu::playBiene()
 		{
 			case INN_EMPIRE:
 				wmvprintw(mainscreen, chatAdder, 1, "...");chatAdder++;
-				location[y][x] = map.mapMove(INN_EMPIRE, y, x);
+				location[y][x] = map -> mapMove(INN_EMPIRE, y, x);
 				break;
 			case INN_EMPIRE_ROOMA:
 				wmvprintw(mainscreen, chatAdder, 1, "...");chatAdder++;
-				location[y][x] = map.mapMove(INN_EMPIRE_ROOMA, y, x);
+				location[y][x] = map -> mapMove(INN_EMPIRE_ROOMA, y, x);
 				break;
 			
 				

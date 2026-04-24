@@ -5,10 +5,10 @@ Inventory::Inventory()
 	inventoryScreen = menuFunc_drawWindow(INVENTORY, menuLimitY, menuLimitX);
 	werase(inventoryScreen);
 	wrefresh(inventoryScreen);
-	//for(int i=0;i<=32;i++)
-	//{
-	//	itemList[i]=" ";
-	//}
+	for(int i=0;i<=30;i++)
+	{
+		itemList[i]=" ";
+	}
 }
 
 int Inventory::inventoryMove()
@@ -17,7 +17,7 @@ int Inventory::inventoryMove()
 	bool inloop=true;
 	bool enterpressed;
 	int menuType;
-	menu=1;
+	menu=0;
 	
 	while(inloop==true)
 	{
@@ -27,7 +27,7 @@ int Inventory::inventoryMove()
 		{
 			case KEY_UP:
 				menu--;
-				if(menu<=1) menu=1;
+				if(menu<=0) menu=0;
 				break;
 			case KEY_DOWN:
 				menu++;
@@ -65,26 +65,26 @@ int Inventory::inventoryMove()
 
 int Inventory::addItem(int itemID)
 {
-	for(int i;i<=32;i++)
+	for(int i=0;i<=30;i++)
 	{
-		if(i==0)
+		if(itemList[i]==" ")
 		{
 			switch(itemID)
 			{
 				case BROKEN_KNIFE: itemList[i]="Broken Knife"; break;
 				default: break;
 			}
-			return 1;
+			return 1; //success
 		}
 	}
-	return 0;
+	return 0; //failure
 }
 
 void Inventory::inventoryRender()
 {
 	
-	for(int i;i<=32;i++)
+	for(int i=0;i<=30;i++)
 	{
-		wmvprintw(inventoryScreen, i, 2, itemList[i]);
+		wmvprintw(inventoryScreen, i+1, 1, itemList[i]);
 	}
 }

@@ -18,7 +18,6 @@ class Tile//:public menumenu
 	void tileDraw(int y, int x, TileType tile, WINDOW* mapScreen);
 	void tileMap(int mapID, WINDOW* mapScreen);
 	int tileCollision(int y, int x);
-	void noMoreEnemyTile(int mapIndex);
-	void deleteCell(int mapIndex);
+	void deleteCell(int &mapIndex);
 };
 #endif

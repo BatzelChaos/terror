@@ -121,6 +121,7 @@ int Tile::tileCollision(int playerPosY, int playerPosX)
 		case EMPTY_TILE: return EMPTY_TILE;
 		case WALL_TILE: return WALL_TILE;
 		case ENEMY_TILE: return ENEMY_TILE;
+		case TREASURE_TILE: return TREASURE_TILE;
 		case TRANSITION_TILE_NORTH: return TRANSITION_TILE_NORTH;
 		case TRANSITION_TILE_EAST : return TRANSITION_TILE_EAST;
 		case TRANSITION_TILE_WEST : return TRANSITION_TILE_WEST;
@@ -130,12 +131,7 @@ int Tile::tileCollision(int playerPosY, int playerPosX)
 	return EMPTY_TILE;
 }
 
-void Tile::noMoreEnemyTile(int mapIndex)
-{
-	mapIndex=EMPTY_TILE;
-}
-
-void Tile::deleteCell(int mapIndex)
+void Tile::deleteCell(int &mapIndex)
 {
 	mapIndex=EMPTY_TILE;
 }
