@@ -34,6 +34,7 @@ class menumenu
 		int bufferXmenu=15;
 		int bufferYmenu=25;
 		int titleStartx;
+		int selectedCharacter;
 		
 		WINDOW *mainscreen;
 		WINDOW *menuScreen;
@@ -66,17 +67,11 @@ class menumenu
 		int resetSettings();
 		int audio();
 		int newGameScreen();
+		int pauseMenu();
 		
 		void mapIndexingInit();
+		void setmenuType(int m);
 		
 		int characterSelect();
 		int characterSelectMove();
-		
-		void playBiene();
-		void interaction(int interactionItem, int interactionPlace, int interactionCharacter);
-		void playKaniel();
-		void playCartal();
-		void playAlbert();
-		
-		void help(int request);
 };

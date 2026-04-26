@@ -3,6 +3,9 @@
 
 class Map:public Player
 {
+	private:
+	menumenu* menuPointer;
+
 	public:
 	WINDOW* mapScreen;
 	Player player;
@@ -14,11 +17,9 @@ class Map:public Player
 
 	int menuLimitXmenu, menuLimitYmenu;
 
-	Inventory* inventory = new Inventory;
-
 
 	
-	Map();
+	Map(menumenu* m);
 	
 	int mapMove(int mapID, int j, int i);
 	void mapDraw(int mapID);

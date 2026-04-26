@@ -8,6 +8,8 @@ Player::Player()
 	atk=5;
 	def=0;
 	spd=11;
+
+	profileScreen = menuFunc_drawWindow(PROFILE_SCREEN, menuLimitY, menuLimitX);
 }
 
 void Player::increaseLVL()
@@ -25,3 +27,7 @@ void Player::increaseLVL()
 	lvl=lvl+lvlUP;
 	lvlUP=0;
 }
+ void Player::playerProfile()
+ {
+
+ }

@@ -82,6 +82,10 @@ int BattleScene::battleMove()
 						break;
 					case BATTLE_RUN:
 						menuType=run();
+						break;
+					case INVENTORY:
+						menuType=items();
+						break;
 				}
 				menu=0; 
 				enterpressed=false;
@@ -104,6 +108,9 @@ int BattleScene::battleMove()
 				wclear(battleScreen);
 				wrefresh(battleScreen);
 				return 0;
+			case INVENTORY:
+				items();
+				break;
 		}
 		wrefresh(battleMenu);
 		keypressed=getch();
@@ -166,6 +173,18 @@ int BattleScene::run()
 	return BATTLE_SELECT;
 }
 
+int BattleScene::items()
+{
+	int value = Inventory::getInstance().inventoryMove();
+	switch(value)
+	{
+		case 0: 
+			menuType=BATTLE_SELECT;
+			return BATTLE_SELECT;
+	}
+	return 0;
+}
+
 int BattleScene::battleEND()
 {
 	player.increaseLVL();
@@ -178,14 +197,14 @@ void BattleScene::battleEnemyRender(int ID, int position)
 	switch(ID)
 	{
 		case KING_OF_DEAD:
-			wmvprintw(battleScreen, 2, position, "    O    ");
-			wmvprintw(battleScreen, 3, position, "    O    ");
-			wmvprintw(battleScreen, 4, position, "    O    ");
-			wmvprintw(battleScreen, 5, position, "    O    ");
-			wmvprintw(battleScreen, 6, position, "    O    ");
-			wmvprintw(battleScreen, 7, position, "    O    ");
-			wmvprintw(battleScreen, 8, position, "    O    ");
-			wmvprintw(battleScreen, 9, position, "    O    ");
+			wmvprintw(battleScreen, 2, position, "    █████   ");
+			wmvprintw(battleScreen, 3, position, "    █   █   ");
+			wmvprintw(battleScreen, 4, position, "    █   █   ");
+			wmvprintw(battleScreen, 5, position, "    █████   ");
+			wmvprintw(battleScreen, 6, position, "      █     ");
+			wmvprintw(battleScreen, 7, position, "      █     ");
+			wmvprintw(battleScreen, 8, position, "      █     ");
+			wmvprintw(battleScreen, 9, position, "      █     ");
 	}
 }
 

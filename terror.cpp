@@ -19,10 +19,11 @@ void wmvprintw(WINDOW *screen, int y, int x, const char *text)
 	wprintw(screen, "%s", text);
 }
 
-void borderControl(WINDOW *screen)
+int borderControl(WINDOW *screen)
 {
 	wborder(screen,'|','|','-','-','o','o','o','o');
 	wrefresh(screen);
+	return 0;
 }
 
 
@@ -38,15 +39,6 @@ WINDOW* menuFunc_drawWindow(int windowType, int& menuLimitY, int& menuLimitX)
 	
 	switch(windowType)
 	{
-		case MAIN_MENU:
-			textBoxPosY = starty+18; textBoxPosX = startx+65;
-			textBoxSizeY = 8; textBoxSizeX = 20;
-			
-			menuLimitY=4; menuLimitX=1;
-			break;
-		
-			
-
 		case INVENTORY:
 			textBoxPosY = starty+1; textBoxPosX = startx+108;
 			textBoxSizeY = 33; textBoxSizeX = 40;
@@ -88,6 +80,20 @@ WINDOW* menuFunc_drawWindow(int windowType, int& menuLimitY, int& menuLimitX)
 
 			menuLimitY = 32; menuLimitX = 64;
 			break;
+		
+		case PROFILE_SCREEN:
+			textBoxPosY = starty+1; textBoxPosX = startx+2;
+			textBoxSizeY = 33; textBoxSizeX = 40;
+
+			menuLimitY = 0; menuLimitX = 0;
+			break;
+		default:
+			textBoxPosY = starty+18; textBoxPosX = startx+65;
+			textBoxSizeY = 8; textBoxSizeX = 20;
+			
+			menuLimitY=4; menuLimitX=1;
+			break;
+		
 	}
 	menuScreen=create_newwin(textBoxSizeY, textBoxSizeX, textBoxPosY, textBoxPosX);
 	return menuScreen;
@@ -155,7 +161,7 @@ void menuFunc(int menu, int menuX, int& menuType, bool enterpressed, int textPos
 int main()
 {
 	srand(time(0));
-	
+
 	bool inloop=true;
 
 	setlocale(LC_ALL, "");

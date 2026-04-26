@@ -1,20 +1,5 @@
 #pragma once
 
-
-//HELP
-#define COMMANDS 300
-
-
-//CHARACTERS
-#define BIENE 400
-#define KANIEL 401
-#define CARTAL 402
-#define ALBERT 403
-#define PH1 404
-#define PH2 405
-#define PH3 406
-#define PH4 407
-
 enum Items
 {
 	BROKEN_KNIFE,
@@ -92,6 +77,21 @@ enum Menu
 	CHARACTER_SELECT,
 
 	MAP_SCREEN,
+	PROFILE_SCREEN,
+	PAUSE_MENU,
+	RESUME,
+};
+
+enum character
+{
+	BIENE,
+	KANIEL,
+	CARTAL,
+	ALBERT,
+	PH1,
+	PH2,
+	PH3,
+	PH4
 };
 
 
@@ -114,6 +114,7 @@ inline int mapIndex[32][32];
 
 #include "inventory.h"
 #include "menumenu.h"
+#include "characterselect.h"
 #include "npc.h"
 #include "player.h"
 #include "battlescene.h"
@@ -136,7 +137,7 @@ WINDOW *menuFunc_drawWindow(int windowType, int& menuLimitY, int& menuLimitX);
 
 void menuFunc(int menu, int menuX, int& menuType, bool enterpressed, int textPositionY, int textPositionX, WINDOW* tempScreen, int returnVar, const char* textVar);
 
-void borderControl(WINDOW *screen);
+int borderControl(WINDOW *screen);
 //int random(int r)
 //{
 //	rand(r);

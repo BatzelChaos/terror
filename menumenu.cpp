@@ -15,9 +15,10 @@ menumenu::menumenu(int height, int width)
 	int startx=(COLS-screenWidth)/2;
 	
 	mainscreen=create_newwin(screenHeight,screenWidth,starty,startx);
+	menuScreen = menuFunc_drawWindow(MAIN_MENU, menuLimitY, menuLimitX);
 	wmove(mainscreen,1,1);
 	wtitle(mainscreen);
-	wmvprintw(mainscreen, 1, 1, "v0.0.12 PRE-ALPHA");
+	wmvprintw(mainscreen, 1, 1, "v0.0.13 PRE-ALPHA");
 	
 	/*inData.open("terror.settings");
 	string data;
@@ -121,44 +122,24 @@ int menumenu::credits()
 
 int menumenu::mainMenu()
 {   //bool enterpressed,||int textPosition, WINDOW* tempScreen, int menuVar,|| int returnVar, const char* textVar
-	menuFunc(menu, menuX, menuType, enterpressed, 1, 1, menuScreen, NEW_GAME, "New Game");
+	menuFunc(menu, menuX, menuType, enterpressed, 1, 1, menuScreen, NEW_GAME, "     New Game     ");
+	menuFunc(menu, menuX, menuType, enterpressed, 2, 1, menuScreen, SETTINGS, "     Settings     ");
+	menuFunc(menu, menuX, menuType, enterpressed, 3, 1, menuScreen, CREDITS, "     Credits      ");
+	menuFunc(menu, menuX, menuType, enterpressed, 4, 1, menuScreen, EXIT, "       Exit       ");
+
+	return menuType;
+}
+
+int menumenu::pauseMenu()
+{
+	menuFunc(menu, menuX, menuType, enterpressed, 1, 1, menuScreen, RESUME, "Resume");
 	menuFunc(menu, menuX, menuType, enterpressed, 2, 1, menuScreen, SETTINGS, "Settings");
-	menuFunc(menu, menuX, menuType, enterpressed, 3, 1, menuScreen, CREDITS, "Credits");
+	menuFunc(menu, menuX, menuType, enterpressed, 3, 1, menuScreen, PAUSE_MENU, "PLACEHOLDER");
 	menuFunc(menu, menuX, menuType, enterpressed, 4, 1, menuScreen, EXIT, "Exit");
 
 	return menuType;
 }
 
-int menumenu::characterSelect()
-{
-	menuFunc_drawWindow(CHARACTER_SELECT, menuLimitY, menuLimitX);
-	menuFunc(menu, menuX, menuType, enterpressed, 1, 1, menuScreen, BIENE, 
-	"Biene, the Exiled Princess"
-"\n █████████▓     ▒   ████████████  "
-"\n ██████            ██████▒██████  "
-"\n ████              ████     █████ "
-"\n ███                         ████ "
-"\n ██                           ████"
-"\n █         ▓▒▓░               ████"
-"\n ▓     █░▓     █ █████▓        ███"
-"\n ▓  █ ███      █████▒█  █      ███"
-"\n █ ░ ██  █     ████  ████▒     ███"
-"\n █▒ ███  ▓    ▓████  ████▓     ███"
-"\n ██ ███  ████ █████  ███▓█    ████"
-"\n ███ █           ██     ▓▒   █▓███"
-"\n █  █▒              ██▒▓       ███"
-"\n █   ░█           █     █   ▓ ████"
-"\n █ █            ░█    ████   ░   ██");
-	menuFunc(menu, menuX, menuType, enterpressed, 17, 1, menuScreen, CARTAL, "Cartal, the Cursed");
-	menuFunc(menu, menuX, menuType, enterpressed, 1, 36, menuScreen, KANIEL, "Kaniel, the Fallen Angel");
-	menuFunc(menu, menuX, menuType, enterpressed, 17, 36, menuScreen, ALBERT, "Albert, the Bloody Knight");
-	menuFunc(menu, menuX, menuType, enterpressed, 1, 71, menuScreen, PH1, "Albert, the Bloody Knight");
-	menuFunc(menu, menuX, menuType, enterpressed, 17, 71, menuScreen, PH2, "Albert, the Bloody Knight");
-	menuFunc(menu, menuX, menuType, enterpressed, 1, 106, menuScreen, PH3, "Albert, the Bloody Knight");
-	menuFunc(menu, menuX, menuType, enterpressed, 17, 106, menuScreen, PH4, "Albert, the Bloody Knight");
-	borderControl(menuScreen);
-	return menuType;
-}
 
 int menumenu::mainMenuMove()
 {
@@ -167,20 +148,10 @@ int menumenu::mainMenuMove()
 	menu=1;
 	menuX=1;
 	
+	borderControl(menuScreen);
+
 	while(inloop==true)
-	{
-		menuScreen = menuFunc_drawWindow(MAIN_MENU, menuLimitY, menuLimitX);
-		
-		
-		if(gameBootedUpFirstTime==true) 
-		{
-			gameBootedUpFirstTime=false;
-			wrefresh(mainscreen);
-			borderControl(menuScreen);
-			mainMenu();
-		}
-		//refreshMainScreen();
-		//causes flickering
+	{	
 		switch(keypressed)
 		{
 			case KEY_UP:
@@ -199,6 +170,8 @@ int menumenu::mainMenuMove()
 				menuX--;
 				if(menuX<=1) menuX=1;
 				break;
+			//case 27: //ESCAPE_KEY
+			//	return EXIT;
 			case 10: //KEY_ENTER
 				enterpressed=true;
 				switch(menuType)
@@ -227,10 +200,15 @@ int menumenu::mainMenuMove()
 					case AUDIO:
 						menuType=audio();
 						break;
-					case EXIT: //might do something with this
+					case EXIT:
+						endwin();
+					case NEW_GAME:
+						menuType = play();
 						break;
-					case NEW_GAME: //and this one, idk tho
-						play();
+					case PAUSE_MENU:
+						menuType = pauseMenu();
+						if (menuType==EXIT) return EXIT;
+						else if (menuType==RESUME) return RESUME;
 						break;
 				}
 				menu=0; 
@@ -264,6 +242,9 @@ int menumenu::mainMenuMove()
 				return EXIT;
 			case NEW_GAME:
 				return NEW_GAME;
+			case PAUSE_MENU:
+				pauseMenu();
+				break;
 		}
 		wrefresh(mainscreen);
 		keypressed=getch();
@@ -272,113 +253,7 @@ int menumenu::mainMenuMove()
 	return 0;
 }
 
-int menumenu::characterSelectMove()
-{
-	menuScreen = menuFunc_drawWindow(CHARACTER_SELECT, menuLimitY, menuLimitX);
-	int keypressed;
-	bool inloop=true;
-	menu=0;
-	menuX=0;
-	while(inloop==true)
-	{
-		switch(keypressed)
-		{
-			case KEY_UP:
-				menu--;
-				if(menu<=0) menu=0;
-				break;
-			case KEY_DOWN:
-				menu++;
-				if(menu>=menuLimitY) menu=menuLimitY;
-				break;
-			case KEY_RIGHT:
-				menuX++;
-				if(menuX>=menuLimitX) menuX=menuLimitX;
-				break;
-			case KEY_LEFT:
-				menuX--;
-				if(menuX<=0) menuX=0;
-				break;
-			case 10: //KEY_ENTER
-				enterpressed=true;
-				break;
-			default: break;
-		}
-		
-		if (enterpressed==false)
-		{
-		characterSelect();	
-		}
-	
-		else
-		{
-			switch(menuType)
-			{
-				case CHARACTER_SELECT:
-					menuType=characterSelect();
-					break;
-				case BIENE:
-					playBiene();
-					break;
-			}
-			menu=0; 
-			enterpressed=false;
-			werase(menuScreen);
-			borderControl(menuScreen);
-		}
-		keypressed=getch();
-		wrefresh(mainscreen);
-	
-	}
-	return 0;
-}
 
-void menumenu::interaction(int interactionItem, int interactionPlace, int interactionCharacter)
-{
-
-}
-
-void menumenu::playBiene()
-{
-	werase(mainscreen);
-	borderControl(mainscreen);
-	wrefresh(mainscreen);
-	
-	chatAdder=1;
-	bool bieneLoop=true;
-	int y=0; int x=0;
-	
-	wmvprintw(mainscreen, chatAdder, 1, "Exiled from the Hive after the uprising of your sister, you wander through the streets of the");chatAdder++;
-	wmvprintw(mainscreen, chatAdder, 1, "Human Empire, almost broke with little fame to your name aside from your impressive height.");chatAdder++;
-	wmvprintw(mainscreen, chatAdder, 1, "...");chatAdder++;
-	wmvprintw(mainscreen, chatAdder, 1, "You wake up in an inn, the nightmares of the last day at the Hive plaguing your mind.");chatAdder++;
-	wmvprintw(mainscreen, chatAdder, 1, "Your temporary adobe has your trusty Hammer-Spear, an Apple and your Coat.");chatAdder++;
-	wmvprintw(mainscreen, chatAdder, 1, "..."); chatAdder++;
-	wmvprintw(mainscreen, chatAdder, 1, "Commands: look, take, go, speak."); chatAdder++;
-	
-	Map* map = new Map;
-	
-	while (bieneLoop==true)
-	{
-
-		switch(location[y][x])
-		{
-			case INN_EMPIRE:
-				wmvprintw(mainscreen, chatAdder, 1, "...");chatAdder++;
-				location[y][x] = map -> mapMove(INN_EMPIRE, y, x);
-				break;
-			case INN_EMPIRE_ROOMA:
-				wmvprintw(mainscreen, chatAdder, 1, "...");chatAdder++;
-				location[y][x] = map -> mapMove(INN_EMPIRE_ROOMA, y, x);
-				break;
-			
-				
-			
-		}
-	}
-	//interactionBiene();
-
-}
 int menumenu::menuInitialise()
 {
 	//werase(mainscreen);
@@ -388,26 +263,14 @@ int menumenu::menuInitialise()
 	
 	enterpressed=false;
 	menu=0; menuX=0;
-	menuType=MAIN_MENU; //0
-	mainMenuMove();
+	menuType=MAIN_MENU;
 	wrefresh(mainscreen);
-	//borderControl(mainscreen);
 	int gamestate=0; //0 is menu
 	while(gamestate==0) // 4 is NEW_GAME
 	{ //3 is exit
 		gamestate=mainMenuMove();
 	}
 	return gamestate;
-}
-
-void menumenu::help(int helprequest)
-{
-	switch(helprequest)
-	{
-		case COMMANDS:
-			wmvprintw(mainscreen, chatAdder, 1, "look, take, go, speak"); chatAdder++;
-			break;
-	}
 }
 
 int menumenu::play()
@@ -443,26 +306,54 @@ int menumenu::play()
 	
 	wgetch(mainscreen);
 	
-	menuType=CHARACTER_SELECT;
-	characterSelect();
-	characterSelectMove();
+	menuType = CHARACTER_SELECT;
+	CharacterSelect* tempCharSelect = new CharacterSelect(mainscreen);
+	selectedCharacter = tempCharSelect -> characterSelectMove();
+	delete tempCharSelect;
+			
+	Map* map = new Map(this);
+			
+	werase(mainscreen);
+	borderControl(mainscreen);
+	wrefresh(mainscreen);
+	
+	chatAdder=1;
+	int y=0; int x=0;
+	
+	switch(selectedCharacter)
+	{
+		case BIENE:
+			/*
+			wmvprintw(mainscreen, chatAdder, 1, "Exiled from the Hive after the uprising of your sister, you wander through the streets of the");chatAdder++;
+			wmvprintw(mainscreen, chatAdder, 1, "Human Empire, almost broke with little fame to your name aside from your impressive height.");chatAdder++;
+			wmvprintw(mainscreen, chatAdder, 1, "...");chatAdder++;
+			wmvprintw(mainscreen, chatAdder, 1, "You wake up in an inn, the nightmares of the last day at the Hive plaguing your mind.");chatAdder++;
+			wmvprintw(mainscreen, chatAdder, 1, "Your temporary adobe has your trusty Hammer-Spear, an Apple and your Coat.");chatAdder++;
+			wmvprintw(mainscreen, chatAdder, 1, "..."); chatAdder++;
+			wmvprintw(mainscreen, chatAdder, 1, "Commands: look, take, go, speak."); chatAdder++;
+			*/
+			while (true)
+			{
+				int tempValue = location[y][x];
+				switch(location[y][x])
+				{
+					case INN_EMPIRE:
+						wmvprintw(mainscreen, chatAdder, 1, "...");chatAdder++;
+						location[y][x] = map -> mapMove(INN_EMPIRE, y, x);
+						break;
+					case INN_EMPIRE_ROOMA:
+						wmvprintw(mainscreen, chatAdder, 1, "...");chatAdder++;
+						location[y][x] = map -> mapMove(INN_EMPIRE_ROOMA, y, x);
+						break;
+				}
+			}
+	}
+	return EXIT; //ENDS THE GAME
+}
 
-	WINDOW *tempScreen;
-	tempScreen=create_newwin(6, 50, bufferY, bufferX);
-	wmvprintw(tempScreen, 1, 1, "Enter your name:");
-	
-
-	//menuMove(20, 35, characterSelect);
-	
-	
-
-	//wgetstr(tempScreen, playerName);
-	//cin<<playerName;
-	//wmvprintw(tempScreen, 2, 1, playerName);
-	wgetch(tempScreen);
-	
-	//wmvprintw(mainscreen, titleBufferY+04, tit)
-	return 0; //CHANGE THIS
+void menumenu::setmenuType(int m)
+{
+	menuType = m;
 }
 
 void menumenu::mapIndexingInit()

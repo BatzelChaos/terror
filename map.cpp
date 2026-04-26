@@ -1,6 +1,6 @@
 #include "terror.h"
 
-Map::Map()
+Map::Map(menumenu* m): menuPointer(m)
 {
 	
 	mapScreen=menuFunc_drawWindow(MAP_SCREEN, tempY, tempX);
@@ -80,30 +80,19 @@ int Map::mapMove(int mapID, int j, int i)
 				}
 				playerPositionX=tempX;
 				break;
-			//case 10: //KEY_ENTER
-			//	enterpressed=true;
-			//	playerPositionY=1;
-			//	playerPositionX=1;
-			//	enterpressed=false;
-			//	break;
 			case 'i':
-				int value = inventory -> inventoryMove();
+			{
+				int value = Inventory::getInstance().inventoryMove();
 				switch(value)
 				{
 					case 0: break;
 				}
 				break;
+			}
 			case 27: //ESCAPE_KEY
-				break; //ADD PAUSE MENU
+				menuPointer -> setmenuType(PAUSE_MENU);
+				menuPointer -> mainMenuMove();
 		}
-		/*switch(collision())
-		{
-			case NORTH: return location[j+1][i];
-			case EAST: return location[j][i+1];
-			case WEST: return location[j][i-1];
-			case SOUTH: return location[j-1][i];
-			default: break;
-		}*/
 		borderControl(mapScreen);
 		playerDraw();
 		
@@ -177,7 +166,7 @@ int Map::collision()
 			switch(mapID)
 			{
 				case INN_EMPIRE:
-					int value = inventory -> addItem(BROKEN_KNIFE);
+					int value = Inventory::getInstance().addItem(BROKEN_KNIFE);
 					if (value==1)
 					{
 						tile.deleteCell(mapIndex[tempY][tempX]);

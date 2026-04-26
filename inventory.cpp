@@ -13,7 +13,7 @@ Inventory::Inventory()
 
 int Inventory::inventoryMove()
 {
-	char keypressed;
+	int keypressed;
 	bool inloop=true;
 	bool enterpressed;
 	int menuType;
@@ -48,6 +48,10 @@ int Inventory::inventoryMove()
 				menu=0; 
 				enterpressed=false;
 				break;
+			case 27: //ESCAPE_KEY
+				werase(inventoryScreen);
+				wrefresh(inventoryScreen);
+				return 0;
 			default: break;
 		}
 		switch(menuType)
